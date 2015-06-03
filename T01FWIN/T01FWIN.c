@@ -7,7 +7,7 @@
 
 /* Имя класса окна */
 #define WND_CLASS_NAME "My window class"
-
+#define sqr(X) ((X) * (X))
 int i;
 POINT pt;
 
@@ -117,10 +117,18 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     Ellipse(hDC, w/2, 0, w, h);
     SelectObject(hDC, GetStockObject(DC_BRUSH)); /*color to black*/
     SetDCBrushColor(hDC, RGB(0, 0, 0));
-    Ellipse(hDC, w/4 - 5 + pt.x/(w/16), h/2 - 5 + pt.y/(h/8),
-                 w/4 + 5 + pt.x/(w/16), h/2 + 5 + pt.y/(h/8));  
+
+    /*if(sqr(pt.x/(w/16) - 5) +  sqr(pt.y/(h/8) - 5) > 
+      sqr(w/4) + sqr(h/2)); */
+
+    //float X1 = pt.x/(w/16), Y1 = pt.y/(h/8);
+
+    Ellipse(hDC, w/4 - 6 + pt.x/(w/16), h/2 - 6 + pt.y/(h/8),
+                 w/4 + 6 + pt.x/(w/16), h/2 + 6 + pt.y/(h/8));  
+    /*GetCursorPos(&pt);
+    ScreenToClient(hWnd, &pt);*/
     Ellipse(hDC, w/2 + w/4 - 5 + pt.x/(w/16), h/2 - 5 + pt.y/(h/8),
-                 w/2 + w/4 + 5 + pt.x/(w/16), h/2 + 5 + pt.y/(h/8)); 
+                 w/2 + w/4 + 5 + pt.x/(3/2*w/16), h/2 + 5 + pt.y/(h/8)); 
     ReleaseDC(hWnd, hDC);
     return 0;
   case WM_DESTROY:
