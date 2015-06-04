@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="T02LOCK"
-	ProjectGUID="{88585432-8E43-4026-9518-1BFB9FB1E7C1}"
-	RootNamespace="T02LOCK"
+	Name="T05GLOBE"
+	ProjectGUID="{C38ED355-AA02-4014-8303-945E2F248EB5}"
+	RootNamespace="T05GLOBE"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -179,7 +179,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\T03CLOCK.C"
+				RelativePath=".\T05DBLB.C"
 				>
 			</File>
 		</Filter>
