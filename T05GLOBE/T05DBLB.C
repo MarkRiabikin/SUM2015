@@ -147,9 +147,9 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
                                WPARAM wParam, LPARAM lParam )
 {
   HDC hDC;
-  DOUBLE i, j, R = 100;
+  DOUBLE i, j, R = 100, step = PI/50,
+    x, y;
   CREATESTRUCT *cs;
-  RECT rc;
   POINT pnts[4];
   static INT xx[100], yy[100];
   static BITMAP bm;
@@ -190,7 +190,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     /* Clear Background */
     SelectObject(hMemDC, GetStockObject(NULL_PEN));
     SelectObject(hMemDC, GetStockObject(DC_BRUSH));
-    SetDCBrushColor(hMemDC, RGB(30, 30, 30));
+    SetDCBrushColor(hMemDC, RGB(230, 230, 230));
     Rectangle(hMemDC, 0, 0, w + 1, h + 1);
 
     StretchBlt(hMemDC, 0, 0, w, h,
@@ -198,14 +198,26 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
 
     /* Draw sphere */
 
+    x = w/2, y = h/2;
     srand(30);
     
-    for(i = 0; i < 2 * PI; i+=0.1)
-      for(j = -PI; j < PI; j+=0.1)
+    for(i = 0; i < 2 * PI; i+= step)
+      for(j = -PI; j < PI; j+= step)
       {
-        SetPixel(hMemDC, 150 + sin(i) * R/2, 200 + cos(j), 
-                 RGB(rand()%255, rand()%255, rand()%255));
-        //Polygon(hMemDC, 
+        SelectObject(hMemDC, GetStockObject(DC_PEN));
+        SelectObject(hMemDC, GetStockObject(DC_BRUSH));
+        SetDCPenColor(hMemDC, RGB(50, 50, 50));
+        SetDCBrushColor(hMemDC, RGB(0, 0, 0));
+        pnts[0].x = x + R * sin(j) * sin(i);      //formuls prom last page -
+        pnts[0].y = y + R * cos(j);               // sphere to dekart
+        pnts[1].x = x + R * sin(j) * sin(i);                              
+        pnts[1].y = y + R * sin(j);
+        pnts[2].x = x + R * sin(j) * sin(i);                              
+        pnts[2].y = y + R * cos(j);
+        pnts[3].x = x + R * sin(j) * sin(i);                              
+        pnts[3].y = y + R * cos(j);
+        if( sin(j) * cos(i) >= 0 )
+          Polygon(hMemDC, pnts, 4);  
       }
 
        
