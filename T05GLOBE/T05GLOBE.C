@@ -1,21 +1,11 @@
-/* FILE NAME: T02DBLB.C
- * PROGRAMMER: VG4
- * DATE: 02.06.2015
- * PURPOSE: WinAPI windowed application sample.
+/* FILE NAME: T05GLOBE.C
+ * PROGRAMMER: MR3
+ * DATE: 05.06.2015
+ * PURPOSE: drawing sphere with animation.
  */
 
-#pragma warning(disable: 4244)
-
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <time.h>
-
-#include <windows.h>
-
-/* »м€ класса окна */
-#define WND_CLASS_NAME "My window class"
-#define PI       3.14159265358979323846
+#include "VECS.h"
+#include "Image1.h"
 
 /* —сылка вперед */
 LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
@@ -147,15 +137,19 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
                                WPARAM wParam, LPARAM lParam )
 {
   HDC hDC;
-  DOUBLE i, j, R = 100, step = PI/50,
+  DOUBLE R = 200, step = 0, rot,
     x, y;
   CREATESTRUCT *cs;
-  POINT pnts[4];
   static INT xx[100], yy[100];
   static BITMAP bm;
   static HBITMAP hBm, hBmLogo;
   static HDC hMemDC, hMemDCLogo;
   static INT w, h;
+  IMAGE Img;
+  Img.hBm = hbm;
+  Img.hDC = hMemDC;
+  Img.H = 1440;
+  Img.W = 720;
 
   switch (Msg)
   {
@@ -196,29 +190,33 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     StretchBlt(hMemDC, 0, 0, w, h,
       hMemDCLogo, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
 
-    /* Draw sphere */
+    /*Load Picture*/
+    if(!ImageLoad( Img, "globe.bmp")
+      ImageFree(Img);
 
-    x = w/2, y = h/2;
+    /* Draw sphere */
     srand(30);
     
-    for(i = 0; i < 2 * PI; i+= step)
+    BuildGlobe(h, w);
+    DrawGlobe(hMemDC, h, w);
+
+    /*for(i = 0 + rot; i < 2 * PI + rot; i+= step)
       for(j = -PI; j < PI; j+= step)
       {
-        SelectObject(hMemDC, GetStockObject(DC_PEN));
+        SelectObject(hMemDC, GetStockObject(NULL_PEN));
         SelectObject(hMemDC, GetStockObject(DC_BRUSH));
-        SetDCPenColor(hMemDC, RGB(50, 50, 50));
-        SetDCBrushColor(hMemDC, RGB(0, 0, 0));
-        pnts[0].x = x + R * sin(j) * sin(i);      //formuls prom last page -
-        pnts[0].y = y + R * cos(j);               // sphere to dekart
-        pnts[1].x = x + R * sin(j) * sin(i);                              
-        pnts[1].y = y + R * sin(j);
-        pnts[2].x = x + R * sin(j) * sin(i);                              
-        pnts[2].y = y + R * cos(j);
-        pnts[3].x = x + R * sin(j) * sin(i);                              
-        pnts[3].y = y + R * cos(j);
+        SetDCBrushColor(hMemDC, RGB(rand()%50, rand()%200, rand()%250));
+        /*pnts[0].x = x + R * sin(j) * sin(i);      
+        pnts[0].y = y + R * cos(j);               
+        pnts[1].x = x + R * sin(j) * sin(i + step);                              
+        pnts[1].y = y + R * cos(j);
+        pnts[2].x = x + R * sin(j + step) * sin(i + step);                              
+        pnts[2].y = y + R * cos(j + step);
+        pnts[3].x = x + R * sin(j + step) * sin(i);                              
+        pnts[3].y = y + R * cos(j + step);
         if( sin(j) * cos(i) >= 0 )
           Polygon(hMemDC, pnts, 4);  
-      }
+      }*/
 
        
     InvalidateRect(hWnd, NULL, TRUE);
