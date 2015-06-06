@@ -48,7 +48,6 @@ VEC VecSubVec( VEC A, VEC B )
 /* Рисование четырехугольника */
 VOID DrawQuad( HDC hDC, VEC P0, VEC P1, VEC P2, VEC P3, INT W, INT H )
 {
-  VEC Norm = VecCrossVec(VecSubVec(P3, P0), VecSubVec(P1, P0));
   POINT pnts[4];
 
   /* back-face culling */
@@ -95,7 +94,7 @@ VOID BuildGlobe(INT H, INT W)
   }
 } /* End of 'BuildGlobe' function */
 
-VOID DrawGlobe(HDC hDC, INT H, INT W, IMAGE Img)
+VOID DrawGlobe(HDC hDC, INT H, INT W, IMAGE *Img)
 {
   INT i, j;
   for(i = 0; i < N; i++)
@@ -103,8 +102,8 @@ VOID DrawGlobe(HDC hDC, INT H, INT W, IMAGE Img)
     {
       SelectObject(hDC, GetStockObject(NULL_PEN));
       SelectObject(hDC, GetStockObject(DC_BRUSH));
-      SetDCBrushColor(hDC, RGB(ImageGetP(Img, i * Img.H / (N - 1),
-                                              j * Img.W / (M - 1))));
+      SetDCBrushColor(hDC, ImageGetP(Img, (INT)(i * Img->H / (N - 1)),
+                                              (INT)(j * Img->W / (M - 1))));
       DrawQuad(hDC,Grid[i][j],Grid[i+1][j],
                    Grid[i+1][j+1], Grid[i][j+1], H, W); 
     }

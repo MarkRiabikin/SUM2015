@@ -145,11 +145,7 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
   static HBITMAP hBm, hBmLogo;
   static HDC hMemDC, hMemDCLogo;
   static INT w, h;
-  IMAGE Img;
-  Img.hBm = hbm;
-  Img.hDC = hMemDC;
-  Img.H = 1440;
-  Img.W = 720;
+  IMAGE *Img;
 
   switch (Msg)
   {
@@ -190,15 +186,20 @@ LRESULT CALLBACK MyWindowFunc( HWND hWnd, UINT Msg,
     StretchBlt(hMemDC, 0, 0, w, h,
       hMemDCLogo, 0, 0, bm.bmWidth, bm.bmHeight, SRCCOPY);
 
+/*    Img->hBm = hBm;
+    Img->hDC = hMemDC;
+    Img->H = 1440;
+    Img->W = 720; */
+
     /*Load Picture*/
-    if(!ImageLoad( Img, "globe.bmp")
-      ImageFree(Img);
+    /*if( !ImageLoad( Img, "globe.bmp"))
+      ImageFree( Img);*/
 
     /* Draw sphere */
     srand(30);
     
     BuildGlobe(h, w);
-    DrawGlobe(hMemDC, h, w);
+    DrawGlobe(hMemDC, h, w, Img);
 
     /*for(i = 0 + rot; i < 2 * PI + rot; i+= step)
       for(j = -PI; j < PI; j+= step)
