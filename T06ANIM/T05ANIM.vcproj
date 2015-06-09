@@ -179,19 +179,11 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\LOAD.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LOADOBJ.c"
+				RelativePath=".\DEF.h"
 				>
 			</File>
 			<File
 				RelativePath=".\MAIN.c"
-				>
-			</File>
-			<File
-				RelativePath=".\T06ANIM.c"
 				>
 			</File>
 			<File
@@ -231,6 +223,14 @@
 				>
 				<File
 					RelativePath=".\TIMER.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Controll"
+				>
+				<File
+					RelativePath=".\UCONTRL.c"
 					>
 				</File>
 			</Filter>

@@ -3,6 +3,7 @@
 
 #define WND_CLASS_NAME "My Window Class Name"
 
+INT MR3_MouseWheel;
 /* Ссылки вперед */
 LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
                                  WPARAM wParam, LPARAM lParam );
@@ -69,7 +70,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   /*** Добавление объектов ***/
   for (i = 0; i < 300; i++)
-    VG4_AnimAddUnit(VG4_UnitBallCreate());
+    MR3_AnimAddUnit(MR3_UnitBallCreate());
 
   /* Запуск цикла обработки сообщений */
   while (GetMessage(&msg, NULL, 0, 0))
@@ -106,25 +107,28 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   {
   case WM_CREATE:
     SetTimer(hWnd, 30, 1, NULL);
-    VG4_AnimInit(hWnd);
+    MR3_AnimInit(hWnd);
     return 0;
   case WM_SIZE:
-    VG4_AnimResize(LOWORD(lParam), HIWORD(lParam));
-    VG4_AnimRender();
+    MR3_AnimResize(LOWORD(lParam), HIWORD(lParam));
+    MR3_AnimRender();
     return 0;
   case WM_TIMER:
-    VG4_AnimRender();
-    VG4_AnimCopyFrame();
+    MR3_AnimRender();
+    MR3_AnimCopyFrame();
+    return 0;
+  case WM_MOUSEWHEEL:
+    MR3_MouseWheel += (SHORT)HIWORD(wParam) / WHEEL_DELTA;
     return 0;
   case WM_ERASEBKGND:
     return 1;
   case WM_PAINT:
     hDC = BeginPaint(hWnd, &ps);
     EndPaint(hWnd, &ps);
-    VG4_AnimCopyFrame();
+    MR3_AnimCopyFrame();
     return 0;
   case WM_DESTROY:
-    VG4_AnimClose();
+    MR3_AnimClose();
     PostQuitMessage(0);
     KillTimer(hWnd, 30);
     return 0;

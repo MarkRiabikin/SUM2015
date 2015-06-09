@@ -1,7 +1,27 @@
 #include "anim.h"
+#include <mmsystem.h>
+#pragma comment(lib, "winmm")
+
+/* Получение значения оси джойстика */
+#define MR3_GET_AXIS_VALUE(Axis) \
+  (2.0 * (ji.dw ## Axis ## pos - jc.w ## Axis ## min) / (jc.w ## Axis ## max - jc.w ## Axis ## min) - 1.0)
+
+/* Сохраненные мышиные координаты */
+static INT
+  MR3_MouseOldX, MR3_MouseOldY;
 
 /* Системный контекст анимации */
 static mr3ANIM MR3_Anim;
+/* переменные таймера*/
+static INT64
+  TimeFreq,  /* единиц измерения в секунду */
+  TimeStart, /* время начала анимации */
+  TimeOld,   /* время прошлого кадра */
+  TimePause, /* время простоя в паузе */
+  TimeFPS;   /* время для замера FPS */
+static INT
+  FrameCounter; /* счетчик кадров */
+
 
 /* Функция инициализации анимации.
  * АРГУМЕНТЫ:
@@ -13,6 +33,9 @@ VOID MR3_AnimInit( HWND hWnd )
 {
   HDC hDC = GetDC(hWnd);
   LARGE_INTEGER li;
+  POINT pt;
+  
+  memset(&MR3_Anim, 0, sizeof(MR3ANIM));
 
   MR3_Anim.hWnd = hWnd;
   /* Инициализируем буфер кадра */
@@ -26,7 +49,19 @@ VOID MR3_AnimInit( HWND hWnd )
 
   /* Инициализация таймера */
   QueryPerformanceFrequency(&li);
+  TimeFreq = li.QuadPart;
   QueryPerformanceCounter(&li);
+  TimeStart = TimeOld = TimeFPS = li.QuadPart;
+  MR3_Anim.IsPause = FALSE;
+  FrameCounter = 0;
+
+  /* Инициализация ввода */
+  GetCursorPos(&pt);
+  ScreenToClient(MR3_Anim.hWnd, &pt);
+  MR3_MouseOldX = pt.x;
+  MR3_MouseOldY = pt.y;
+  GetKeyboardState(MR3_Anim.KeysOld);
+
 } /* End of 'MR3_AnimInit' function */
 
 /* Функция деинициализации анимации.
@@ -79,6 +114,92 @@ VOID MR3_AnimResize( INT W, INT H )
 VOID MR3_AnimRender( VOID )
 {
   INT i;
+  LARGE_INTEGER li;
+  POINT pt;
+
+  /*** Обновление input***/
+    /* Клавиатура */
+  GetKeyboardState(MR3_Anim.Keys);
+  for (i = 0; i < 256; i++)
+    MR3_Anim.Keys[i] >>= 7;
+  for (i = 0; i < 256; i++)
+    MR3_Anim.KeysClick[i] = MR3_Anim.Keys[i] && !MR3_Anim.KeysOld[i];
+  memcpy(MR3_Anim.KeysOld, MR3_Anim.Keys, sizeof(MR3_Anim.KeysOld));
+
+  /* Мышь */
+  /* колесо */
+  MR3_Anim.MsWheel = MR3_MouseWheel;
+  MR3_MouseWheel = 0;
+  /* абсолютная позиция */
+  GetCursorPos(&pt);
+  ScreenToClient(MR3_Anim.hWnd, &pt);
+  MR3_Anim.MsX = pt.x;
+  MR3_Anim.MsY = pt.y;
+  /* относительное перемещение */
+  MR3_Anim.MsDeltaX = pt.x - MR3_MouseOldX;
+  MR3_Anim.MsDeltaY = pt.y - MR3_MouseOldY;
+  MR3_MouseOldX = pt.x;
+  MR3_MouseOldY = pt.y;
+
+  /* Джойстик */
+  if ((i = joyGetNumDevs()) > 0)
+  {
+    JOYCAPS jc;
+
+    /* получение общей информации о джостике */
+    if (joyGetDevCaps(JOYSTICKID2, &jc, sizeof(jc)) == JOYERR_NOERROR)
+    {
+      JOYINFOEX ji;
+
+      /* получение текущего состояния */
+      ji.dwSize = sizeof(JOYCAPS);
+      ji.dwFlags = JOY_RETURNALL;
+      if (joyGetPosEx(JOYSTICKID2, &ji) == JOYERR_NOERROR)
+      {
+        /* Кнопки */
+        memcpy(MR3_Anim.JButsOld, MR3_Anim.JButs, sizeof(MR3_Anim.JButs));
+        for (i = 0; i < 32; i++)
+          MR3_Anim.JButs[i] = (ji.dwButtons >> i) & 1;
+        for (i = 0; i < 32; i++)
+          MR3_Anim.JButs[i] = MR3_Anim.JButs[i] && !MR3_Anim.JButsOld[i];
+
+        /* Оси */
+        MR3_Anim.JX = MR3_GET_AXIS_VALUE(X);
+        MR3_Anim.JY = MR3_GET_AXIS_VALUE(Y);
+        if (jc.wCaps & JOYCAPS_HASZ)
+          MR3_Anim.JZ = MR3_GET_AXIS_VALUE(Z);
+        if (jc.wCaps & JOYCAPS_HASU)
+          MR3_Anim.JU = MR3_GET_AXIS_VALUE(U);
+        if (jc.wCaps & JOYCAPS_HASV)
+          MR3_Anim.JV = MR3_GET_AXIS_VALUE(V);
+        if (jc.wCaps & JOYCAPS_HASR)
+          MR3_Anim.JR = MR3_GET_AXIS_VALUE(R);
+
+        if (jc.wCaps & JOYCAPS_HASPOV)
+        {
+          if (ji.dwPOV == 0xFFFF)
+            MR3_Anim.JPOV = 0;
+          else
+            MR3_Anim.JPOV = ji.dwPOV / 4500 + 1;
+        }
+      }
+    }
+  }
+
+  /*** Обновление таймера ***/
+  QueryPerformanceCounter(&li);
+  MR3_Anim.GlobalTime = (DBL)(li.QuadPart - TimeStart) / TimeFreq;
+  MR3_Anim.GlobalDeltaTime = (DBL)(li.QuadPart - TimeOld) / TimeFreq;
+
+  if (!MR3_Anim.IsPause)
+    MR3_Anim.DeltaTime = MR3_Anim.GlobalDeltaTime;
+  else
+  {
+    TimePause += li.QuadPart - TimeOld;
+    MR3_Anim.DeltaTime = 0;
+  }
+
+  MR3_Anim.Time = (DBL)(li.QuadPart - TimePause - TimeStart) / TimeFreq;
 
   /* опрос на изменение состояний объектов */
   for (i = 0; i < MR3_Anim.NumOfUnits; i++)
@@ -100,6 +221,25 @@ VOID MR3_AnimRender( VOID )
 
     MR3_Anim.Units[i]->Render(MR3_Anim.Units[i], &MR3_Anim);
   }
+
+  /* вычисляем FPS */
+  if (li.QuadPart - TimeFPS > TimeFreq)
+  {
+    static CHAR Buf[100];
+
+    sprintf(Buf, "FPS: %.5f", MR3_Anim.FPS);
+    SetWindowText(MR3_Anim.hWnd, Buf);
+
+    MR3_Anim.FPS = FrameCounter / ((DBL)(li.QuadPart - TimeFPS) / TimeFreq);
+    TimeFPS = li.QuadPart;
+    FrameCounter = 0;
+  }
+
+  /* время "прошлого" кадра */
+  TimeOld = li.QuadPart;
+
+  FrameCounter++;
+
 } /* End of 'MR3_AnimRender' function */
 
 /* Функция вывода кадра анимации.
@@ -180,6 +320,17 @@ VOID MR3_AnimFlipFullScreen( VOID )
   }
 } /* End of 'MR3_AnimFlipFullScreen' function */
 
+/* Функция установки паузы анимации.
+ * АРГУМЕНТЫ:
+ *   - флаг паузы:
+ *       BOOL NewPauseFlag;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
+ */
+VOID MR3_AnimSetPause( BOOL NewPauseFlag )
+{
+  MR3_Anim.IsPause = NewPauseFlag;
+} /* End of 'MR3_AnimSetPause' function */
+
 /* Функция выхода из анимации.
  * АРГУМЕНТЫ: Нет.
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
@@ -188,5 +339,6 @@ VOID MR3_AnimDoExit( VOID )
 {
   PostMessage(MR3_Anim.hWnd, WM_CLOSE, 0, 0);
 } /* End of 'MR3_AnimDoExit' function */
+
 
 /* END OF 'ANIM.C' FILE */

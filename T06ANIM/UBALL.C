@@ -60,6 +60,8 @@ static VOID MR3_AnimUnitResponse( mr3UNIT_BALL *Uni, mr3ANIM *Ani )
     MR3_AnimDoExit();
   if (GetAsyncKeyState('F') & 0x8000)
     MR3_AnimFlipFullScreen();
+  if (GetAsyncKeyState('P') & 0x8000)
+
 } /* End of 'MR3_AnimUnitResponse' function */
 
 /* Функция построения объекта анимации.
