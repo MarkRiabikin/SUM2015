@@ -9,24 +9,19 @@
 #include <time.h>
 
 #include "anim.h"
-#include "vec.h"
+#include "control.h"
 
-/* Тип представления мяча */
-typedef struct tagMR3UNIT_CTRL
-{
-  MR3_UNIT_BASE_FIELDS;
-  HFONT hFnt; /* Шрифт для вывода FPS */
-} MR3UNIT_CTRL;
+//#include "vec.h"
 
 /* Функция инициализации объекта анимации.
  * АРГУМЕНТЫ:
  *   - указатель на "себя" - сам объект анимации:
  *       MR3UNIT_CTRL *Uni;
  *   - указатель на контекст анимации:
- *       MR3ANIM *Ani;
+ *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitInit( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
+static VOID MR3_AnimUnitInit( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
 {
   Uni->hFnt = CreateFont(30, 0, 0, 0, FW_BOLD, FALSE, FALSE,
     FALSE, RUSSIAN_CHARSET, OUT_DEFAULT_PRECIS,
@@ -39,10 +34,10 @@ static VOID MR3_AnimUnitInit( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
  *   - указатель на "себя" - сам объект анимации:
  *       MR3UNIT_CTRL *Uni;
  *   - указатель на контекст анимации:
- *       MR3ANIM *Ani;
+ *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitClose( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
+static VOID MR3_AnimUnitClose( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
 {
   DeleteObject(Uni->hFnt);
 } /* End of 'MR3_AnimUnitClose' function */
@@ -52,10 +47,10 @@ static VOID MR3_AnimUnitClose( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
  *   - указатель на "себя" - сам объект анимации:
  *       MR3UNIT_CTRL *Uni;
  *   - указатель на контекст анимации:
- *       MR3ANIM *Ani;
+ *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitResponse( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
+static VOID MR3_AnimUnitResponse( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
 {
   if (Ani->Keys[VK_ESCAPE])
     MR3_AnimDoExit();
@@ -70,10 +65,10 @@ static VOID MR3_AnimUnitResponse( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
  *   - указатель на "себя" - сам объект анимации:
  *       MR3UNIT_CTRL *Uni;
  *   - указатель на контекст анимации:
- *       MR3ANIM *Ani;
+ *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitRender( MR3UNIT_CTRL *Uni, MR3ANIM *Ani )
+static VOID MR3_AnimUnitRender( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
 {
   HFONT hFntOld = SelectObject(Ani->hDC, Uni->hFnt);
   RECT rc;
@@ -117,5 +112,5 @@ MR3UNIT * MR3_UnitControlCreate( VOID )
   Uni->Response = (VOID *)MR3_AnimUnitResponse;
   Uni->Render = (VOID *)MR3_AnimUnitRender;
   return (MR3UNIT *)Uni;
-} /* End of 'MR3_UnitBallCreate' function */
+} /* End of 'MR3_UnitControlCreate' function */
 

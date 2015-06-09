@@ -8,7 +8,7 @@
 #define MR3_MAX_UNITS 3000
 
 /* Объявление типа объектов анимации "вперед" */
-typedef struct tagmr3UNIT mr3UNIT;
+typedef struct tagMR3UNIT MR3UNIT;
 
 /* Структура хранения контекста анимации */
 typedef struct
@@ -41,7 +41,7 @@ typedef struct
     JX, JY, JZ, JR, JU, JV; /* Оси джойстика (-1.0 .. 1.0*/
 
   /* Массив элементов анимации и их количество */
-  mr3UNIT *Units[MR3_MAX_UNITS]; 
+  MR3UNIT *Units[MR3_MAX_UNITS]; 
   INT NumOfUnits;
 
 } mr3ANIM;
@@ -55,23 +55,23 @@ extern INT MR3_MouseWheel;
  * - идентификатор объеткта:
  *     INT Id;
  * - указатель на функцию инициализации
- *     VOID (*Init)( mr3UNIT *Unit, mr3ANIM *Ani );
+ *     VOID (*Init)( MR3UNIT *Unit, mr3ANIM *Ani );
  * - указатель на функцию деинициализации
- *     VOID (*Close)( mr3UNIT *Unit, mr3ANIM *Ani );
+ *     VOID (*Close)( MR3UNIT *Unit, mr3ANIM *Ani );
  * - указатель на функцию обновления межкадровых параметров
- *     VOID (*Response)( mr3UNIT *Unit, mr3ANIM *Ani );
+ *     VOID (*Response)( MR3UNIT *Unit, mr3ANIM *Ani );
  * - указатель на функцию построения
- *     VOID (*Render)( mr3UNIT *Unit, mr3ANIM *Ani );
+ *     VOID (*Render)( MR3UNIT *Unit, mr3ANIM *Ani );
  */
 #define MR3_UNIT_BASE_FIELDS \
   INT Size;                                          \
-  VOID (*Init)( mr3UNIT *Unit, mr3ANIM *Ani );       \
-  VOID (*Close)( mr3UNIT *Unit, mr3ANIM *Ani );      \
-  VOID (*Response)( mr3UNIT *Unit, mr3ANIM *Ani );   \
-  VOID (*Render)( mr3UNIT *Unit, mr3ANIM *Ani )
+  VOID (*Init)( MR3UNIT *Unit, mr3ANIM *Ani );       \
+  VOID (*Close)( MR3UNIT *Unit, mr3ANIM *Ani );      \
+  VOID (*Response)( MR3UNIT *Unit, mr3ANIM *Ani );   \
+  VOID (*Render)( MR3UNIT *Unit, mr3ANIM *Ani )
 
 /* Базовый тип объекта анимации */
-struct tagmr3UNIT
+struct tagMR3UNIT
 {
   MR3_UNIT_BASE_FIELDS;
 };
@@ -113,10 +113,10 @@ VOID MR3_AnimCopyFrame( VOID );
 /* Функция добавления в систему объекта анимации.
  * АРГУМЕНТЫ:
  *   - добавляемый объект анимации:
- *       mr3UNIT *Unit;
+ *       MR3UNIT *Unit;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_AnimAddUnit( mr3UNIT *Unit );
+VOID MR3_AnimAddUnit( MR3UNIT *Unit );
 
 /* Функция переключения в/из полноэкранного режима
  * с учетом нескольких мониторов.
@@ -130,9 +130,9 @@ VOID MR3_AnimFlipFullScreen( VOID );
  *   - размер структуры объекта анимации:
  *       INT Size;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
- *   (mr3UNIT *) указатель на созданный объект анимации.
+ *   (MR3UNIT *) указатель на созданный объект анимации.
  */
-mr3UNIT * MR3_AnimUnitCreate( INT Size );
+MR3UNIT * MR3_AnimUnitCreate( INT Size );
 
 /* Функция выхода из анимации.
  * АРГУМЕНТЫ: Нет.

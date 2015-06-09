@@ -35,7 +35,7 @@ VOID MR3_AnimInit( HWND hWnd )
   LARGE_INTEGER li;
   POINT pt;
   
-  memset(&MR3_Anim, 0, sizeof(MR3ANIM));
+  memset(&MR3_Anim, 0, sizeof(mr3ANIM));
 
   MR3_Anim.hWnd = hWnd;
   /* Инициализируем буфер кадра */
@@ -259,10 +259,10 @@ VOID MR3_AnimCopyFrame( VOID )
 /* Функция добавления в систему объекта анимации.
  * АРГУМЕНТЫ:
  *   - добавляемый объект анимации:
- *       mr3UNIT *Unit;
+ *       MR3UNIT *Unit;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_AnimAddUnit( mr3UNIT *Unit )
+VOID MR3_AnimAddUnit( MR3UNIT *Unit )
 {
   if (MR3_Anim.NumOfUnits < MR3_MAX_UNITS)
   {

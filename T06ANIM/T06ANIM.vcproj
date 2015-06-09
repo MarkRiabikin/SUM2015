@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="T06ANIM"
+	Name="T05ANIM"
 	ProjectGUID="{985185F4-CDA0-467F-9993-485961A5B86E}"
 	RootNamespace="T05ANIM"
 	Keyword="Win32Proj"
@@ -66,7 +66,7 @@
 				AdditionalLibraryDirectories="X:\TGRKIT\LIB;$(DXSDK_DIR)Lib\0x86;$(OPENAL_DIR)Libs;"
 				GenerateManifest="false"
 				GenerateDebugInformation="true"
-				SubSystem="2"
+				SubSystem="1"
 				TargetMachine="1"
 			/>
 			<Tool
@@ -183,14 +183,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LOAD.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LOADOBJ.c"
-				>
-			</File>
-			<File
 				RelativePath=".\MAIN.c"
 				>
 			</File>
@@ -227,12 +219,16 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Controll"
+				Name="Timer functions"
 				>
 				<File
-					RelativePath=".\CONTROL.h"
+					RelativePath=".\TIMER.c"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Controll"
+				>
 				<File
 					RelativePath=".\UCONTRL.c"
 					>
