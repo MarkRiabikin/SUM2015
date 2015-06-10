@@ -56,11 +56,6 @@ static VOID MR3_AnimUnitClose( MR3UNIT_BALL *Uni, mr3ANIM *Ani )
  */
 static VOID MR3_AnimUnitResponse( MR3UNIT_BALL *Uni, mr3ANIM *Ani )
 {
-  if (GetAsyncKeyState(VK_ESCAPE) & 0x8000)
-    MR3_AnimDoExit();
-  if (GetAsyncKeyState('F') & 0x8000)
-    MR3_AnimFlipFullScreen();
-  if (GetAsyncKeyState('P') & 0x8000);
 
 } /* End of 'MR3_AnimUnitResponse' function */
 

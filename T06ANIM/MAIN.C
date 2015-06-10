@@ -1,5 +1,12 @@
+/* FILENAME: MAIN.C
+ * PROGRAMMER: MR3
+ * PURPOSE: Main function.
+ * LAST UPDATE: 10.06.2015
+ */
+
 #include "anim.h"
 #include "units.h"
+#include "control.h"
 
 #define WND_CLASS_NAME "My Window Class Name"
 
@@ -69,8 +76,7 @@ INT WINAPI WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance,
   UpdateWindow(hWnd);
 
   /*** Добавление объектов ***/
-  for (i = 0; i < 300; i++)
-    MR3_AnimAddUnit(MR3_UnitBallCreate());
+  MR3_AnimAddUnit(MR3_UnitModelCreate());
 
   /* Запуск цикла обработки сообщений */
   while (GetMessage(&msg, NULL, 0, 0))

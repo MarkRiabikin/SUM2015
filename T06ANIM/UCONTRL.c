@@ -1,7 +1,7 @@
 /* FILENAME: UCONTRL.C
  * PROGRAMMER: MR3
  * PURPOSE: Control unit handle module.
- * LAST UPDATE: 08.06.2015
+ * LAST UPDATE: 10.06.2015
  */
 
 #include <stdio.h>
@@ -10,6 +10,13 @@
 
 #include "anim.h"
 #include "control.h"
+
+/* Тип представления мяча */
+typedef struct tagMR3UNIT_CTRL
+{
+  MR3_UNIT_BASE_FIELDS;
+  HFONT hFnt; /* Шрифт для вывода FPS */
+} MR3UNIT_CTRL;
 
 //#include "vec.h"
 
@@ -57,7 +64,7 @@ static VOID MR3_AnimUnitResponse( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
   if (Ani->KeysClick['F'])
     MR3_AnimFlipFullScreen();
   if (Ani->KeysClick['P'])
-    MR3_AnimSetPause(!Ani->IsPause);
+    MR3_AnimSetPause( !Ani->IsPause);
 } /* End of 'MR3_AnimUnitResponse' function */
 
 /* Функция построения объекта анимации.
@@ -82,13 +89,7 @@ static VOID MR3_AnimUnitRender( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
   rc.right = Ani->W;
   rc.bottom = Ani->H;
   DrawText(Ani->hDC, Buf,
-    sprintf(Buf,
-      "FPS: %.3f\n"
-      "J: %i %i %i, POV:%i\n"
-      "%.5f %.5f %.5f %.5f %.5f %.5f",
-      Ani->FPS,
-      Ani->JButs[0], Ani->JButs[1], Ani->JButs[2], Ani->JPOV,
-      Ani->JX, Ani->JY, Ani->JZ, Ani->JR, Ani->JU, Ani->JV),
+    sprintf(Buf, "FPS: %.3f\n", Ani->FPS),
     &rc,
     DT_TOP | DT_LEFT);
 

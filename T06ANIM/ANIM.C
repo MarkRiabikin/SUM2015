@@ -1,18 +1,21 @@
 #include "anim.h"
+#include "render.h"
 #include <mmsystem.h>
 #pragma comment(lib, "winmm")
 
 /* Получение значения оси джойстика */
 #define MR3_GET_AXIS_VALUE(Axis) \
-  (2.0 * (ji.dw ## Axis ## pos - jc.w ## Axis ## min) / (jc.w ## Axis ## max - jc.w ## Axis ## min) - 1.0)
+  (2.0 * (ji.dw ## Axis ## pos - jc.w ## Axis ## min) / \
+  (jc.w ## Axis ## max - jc.w ## Axis ## min) - 1.0)
+
+/* Системный контекст анимации */
+mr3ANIM MR3_Anim;
 
 /* Сохраненные мышиные координаты */
 static INT
   MR3_MouseOldX, MR3_MouseOldY;
 
-/* Системный контекст анимации */
-static mr3ANIM MR3_Anim;
-/* переменные таймера*/
+/* переменные таймера*/       
 static INT64
   TimeFreq,  /* единиц измерения в секунду */
   TimeStart, /* время начала анимации */
@@ -59,7 +62,7 @@ VOID MR3_AnimInit( HWND hWnd )
   GetCursorPos(&pt);
   ScreenToClient(MR3_Anim.hWnd, &pt);
   MR3_MouseOldX = pt.x;
-  MR3_MouseOldY = pt.y;
+  MR3_MouseOldY = pt.y;        
   GetKeyboardState(MR3_Anim.KeysOld);
 
 } /* End of 'MR3_AnimInit' function */
@@ -105,6 +108,10 @@ VOID MR3_AnimResize( INT W, INT H )
   MR3_Anim.H = H;
 
   ReleaseDC(MR3_Anim.hWnd, hDC);
+  if (W > H)
+    MR3_RndWp = (DBL)W / H * 3, MR3_RndHp = 3;
+  else
+    MR3_RndHp = (DBL)H / W * 3, MR3_RndWp = 3;
 } /* End of 'MR3_AnimResize' function */
 
 /* Функция построения кадра анимации.

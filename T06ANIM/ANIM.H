@@ -46,6 +46,8 @@ typedef struct
 
 } mr3ANIM;
 
+/* Системный контекст анимации */
+extern mr3ANIM MR3_Anim;
 /* Глобальная переменная - счетчик прокрутки колеса мыши */
 extern INT MR3_MouseWheel;
 

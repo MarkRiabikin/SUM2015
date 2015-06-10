@@ -183,14 +183,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\LOAD.h"
-				>
-			</File>
-			<File
-				RelativePath=".\LOADOBJ.c"
-				>
-			</File>
-			<File
 				RelativePath=".\MAIN.c"
 				>
 			</File>
@@ -207,6 +199,14 @@
 				</File>
 				<File
 					RelativePath=".\ANIM.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RENDER.c"
+					>
+				</File>
+				<File
+					RelativePath=".\RENDER.h"
 					>
 				</File>
 			</Filter>
@@ -235,6 +235,14 @@
 				</File>
 				<File
 					RelativePath=".\UCONTRL.c"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Object"
+				>
+				<File
+					RelativePath=".\UMODEL.c"
 					>
 				</File>
 			</Filter>

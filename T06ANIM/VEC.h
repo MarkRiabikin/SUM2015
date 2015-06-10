@@ -19,15 +19,15 @@ typedef struct tagMATR
   DBL A[4][4];
 } MATR;
 
-MATR UnitMatrix =
-  {
-    {
-      {1, 0, 0, 0},
-      {0, 1, 0, 0},
-      {0, 0, 1, 0},
-      {0, 0, 0, 1}
-    }
-  };
+#define  MR3_UNIT_MATR \
+  {                    \
+    {                  \
+      {1, 0, 0, 0},    \
+      {0, 1, 0, 0},    \
+      {0, 0, 1, 0},    \
+      {0, 0, 0, 1}     \
+    }                  \
+  }
 
 //!!!
 __inline MATR MatrTranslate( DBL Dx, DBL Dy, DBL Dz )
@@ -314,10 +314,11 @@ __inline VEC VecNormalize( VEC V ) //приведение к 1-ой длине
 
 __inline VEC PointTransform( VEC V, MATR M )
 {
+  DBL w = V.X * M.A[0][3] + V.Y * M.A[1][3] + V.Z * M.A[2][3] + M.A[3][3];
   return VecSet(
-    V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0],
-    V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1],
-    V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]);
+    (V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w,
+    (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
+    (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);
 } /*End of 'PointTransform' function*/
 
 __inline VEC VectorTransform( VEC V, MATR M )
@@ -328,4 +329,38 @@ __inline VEC VectorTransform( VEC V, MATR M )
     V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2]);
 
 }  
+
+__inline MATR MatrView( VEC Loc, VEC At, VEC Up1 )
+{
+  VEC
+    Dir = VecNormalize(VecSubVec(At, Loc)),
+    Right = VecNormalize(VecCrossVec(Dir, Up1)),
+    Up = VecNormalize(VecCrossVec(Right, Dir));
+  MATR m =
+  {
+    {
+      {               Right.X,                Up.X,              -Dir.X, 0},
+      {               Right.Y,                Up.Y,              -Dir.Y, 0},
+      {               Right.Z,                Up.Z,              -Dir.X, 0},
+      {-VecDotVec(Loc, Right), -VecDotVec(Loc, Up), VecDotVec(Loc, Dir), 1}
+    }
+  };
+
+  return m;
+} /* End of 'MatrView' function */
+
+__inline MATR MatrFrustum( DBL Left, DBL Right, DBL Top, DBL Bottom, DBL Near, DBL Far )
+{
+  MATR m =
+  {
+    {
+      {      2 * Near / (Right - Left),                               0,                              0,  0},
+      {                              0,       2 * Near / (Top - Bottom),                              0,  0},
+      {(Right + Left) / (Right - Left), (Top + Bottom) / (Top - Bottom),   -(Far + Near) / (Far - Near), -1},
+      {                              0,                               0, -2 * Near * Far / (Far - Near),  0}
+    }
+  };
+
+  return m;
+} /* End of 'MatrFrustum' function */
 /* END OF 'VEC' FILE */
