@@ -10,7 +10,7 @@
  *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitInit( MR3UNIT *Uni, mr3ANIM *Ani )
+static VOID MR3_AnimUnitInit( mr3UNIT *Uni, mr3ANIM *Ani )
 {
 } /* End of 'MR3_AnimUnitInit' function */
 
@@ -22,7 +22,7 @@ static VOID MR3_AnimUnitInit( MR3UNIT *Uni, mr3ANIM *Ani )
  *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitClose( MR3UNIT *Uni, mr3ANIM *Ani )
+static VOID MR3_AnimUnitClose( mr3UNIT *Uni, mr3ANIM *Ani )
 {
 } /* End of 'MR3_AnimUnitClose' function */
 
@@ -34,7 +34,7 @@ static VOID MR3_AnimUnitClose( MR3UNIT *Uni, mr3ANIM *Ani )
  *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitResponse( MR3UNIT *Uni, mr3ANIM *Ani )
+static VOID MR3_AnimUnitResponse( mr3UNIT *Uni, mr3ANIM *Ani )
 {
 } /* End of 'MR3_AnimUnitResponse' function */
 
@@ -46,7 +46,7 @@ static VOID MR3_AnimUnitResponse( MR3UNIT *Uni, mr3ANIM *Ani )
  *       mr3ANIM *Ani;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-static VOID MR3_AnimUnitRender( MR3UNIT *Uni, mr3ANIM *Ani )
+static VOID MR3_AnimUnitRender( mr3UNIT *Uni, mr3ANIM *Ani )
 {
 } /* End of 'MR3_AnimUnitRender' function */
 
@@ -57,11 +57,11 @@ static VOID MR3_AnimUnitRender( MR3UNIT *Uni, mr3ANIM *Ani )
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
  *   (MR3UNIT *) указатель на созданный объект анимации.
  */
-MR3UNIT * MR3_AnimUnitCreate( INT Size )
+mr3UNIT * MR3_AnimUnitCreate( INT Size )
 {
-  MR3UNIT *Uni;
+  mr3UNIT *Uni;
 
-  if (Size < sizeof(MR3UNIT) || (Uni = malloc(Size)) == NULL)
+  if (Size < sizeof(mr3UNIT) || (Uni = malloc(Size)) == NULL)
     return NULL;
   memset(Uni, 0, Size);
   /* заполняем поля по-умолчанию */

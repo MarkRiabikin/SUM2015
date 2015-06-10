@@ -112,6 +112,8 @@ VOID MR3_AnimResize( INT W, INT H )
     MR3_RndWp = (DBL)W / H * 3, MR3_RndHp = 3;
   else
     MR3_RndHp = (DBL)H / W * 3, MR3_RndWp = 3;
+
+  MatrFrustum(  
 } /* End of 'MR3_AnimResize' function */
 
 /* Функция построения кадра анимации.
@@ -269,7 +271,7 @@ VOID MR3_AnimCopyFrame( VOID )
  *       MR3UNIT *Unit;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_AnimAddUnit( MR3UNIT *Unit )
+VOID MR3_AnimAddUnit( mr3UNIT *Unit )
 {
   if (MR3_Anim.NumOfUnits < MR3_MAX_UNITS)
   {

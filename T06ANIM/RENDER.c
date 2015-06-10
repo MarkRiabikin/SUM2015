@@ -34,13 +34,10 @@ POINT MR3_RndWorldToScreen( VEC P )
   VEC Pp;
 
   /* преобразование СК */
-  P = PointTransform(P, MR3_RndMatrWorldView, W, H);
+  Pp = PointTransform(P, MR3_RndMatrWorldView);
 
-  Pp.X = P.X * MR3_RndProjDist / P.Z;
-  Pp.Y = P.Y * MR3_RndProjDist / P.Z;
-
-  Ps.x = MR3_Anim.W / 2 + Pp.X * MR3_Anim.W / MR3_RndWp;
-  Ps.y = MR3_Anim.H / 2 - Pp.Y * MR3_Anim.H / MR3_RndHp;
+  Ps.x = MR3_Anim.W / 2 + Pp.X * MR3_Anim.W;
+  Ps.y = MR3_Anim.H / 2 - Pp.Y * MR3_Anim.H;
 
   return Ps;
 } /* End of 'MR3_RndWorldToScreen' function */

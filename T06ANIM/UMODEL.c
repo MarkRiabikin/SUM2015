@@ -5,12 +5,12 @@
  */
 
 #include "anim.h"
+#include "render.h"
 
 
 typedef struct tagmr3UNIT_MODEL
 {
   MR3_UNIT_BASE_FIELDS;
-
   mr3GOBJ Model; 
 } mr3UNIT_MODEL;
 

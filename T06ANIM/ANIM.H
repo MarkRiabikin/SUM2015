@@ -8,7 +8,7 @@
 #define MR3_MAX_UNITS 3000
 
 /* Объявление типа объектов анимации "вперед" */
-typedef struct tagMR3UNIT MR3UNIT;
+typedef struct tagMR3UNIT mr3UNIT;
 
 /* Структура хранения контекста анимации */
 typedef struct
@@ -41,7 +41,7 @@ typedef struct
     JX, JY, JZ, JR, JU, JV; /* Оси джойстика (-1.0 .. 1.0*/
 
   /* Массив элементов анимации и их количество */
-  MR3UNIT *Units[MR3_MAX_UNITS]; 
+  mr3UNIT *Units[MR3_MAX_UNITS]; 
   INT NumOfUnits;
 
 } mr3ANIM;
@@ -67,10 +67,10 @@ extern INT MR3_MouseWheel;
  */
 #define MR3_UNIT_BASE_FIELDS \
   INT Size;                                          \
-  VOID (*Init)( MR3UNIT *Unit, mr3ANIM *Ani );       \
-  VOID (*Close)( MR3UNIT *Unit, mr3ANIM *Ani );      \
-  VOID (*Response)( MR3UNIT *Unit, mr3ANIM *Ani );   \
-  VOID (*Render)( MR3UNIT *Unit, mr3ANIM *Ani )
+  VOID (*Init)( mr3UNIT *Unit, mr3ANIM *Ani );       \
+  VOID (*Close)( mr3UNIT *Unit, mr3ANIM *Ani );      \
+  VOID (*Response)( mr3UNIT *Unit, mr3ANIM *Ani );   \
+  VOID (*Render)( mr3UNIT *Unit, mr3ANIM *Ani )
 
 /* Базовый тип объекта анимации */
 struct tagMR3UNIT
@@ -118,7 +118,7 @@ VOID MR3_AnimCopyFrame( VOID );
  *       MR3UNIT *Unit;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_AnimAddUnit( MR3UNIT *Unit );
+VOID MR3_AnimAddUnit( mr3UNIT *Unit );
 
 /* Функция переключения в/из полноэкранного режима
  * с учетом нескольких мониторов.
@@ -134,7 +134,7 @@ VOID MR3_AnimFlipFullScreen( VOID );
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
  *   (MR3UNIT *) указатель на созданный объект анимации.
  */
-MR3UNIT * MR3_AnimUnitCreate( INT Size );
+mr3UNIT * MR3_AnimUnitCreate( INT Size );
 
 /* Функция выхода из анимации.
  * АРГУМЕНТЫ: Нет.

@@ -80,7 +80,7 @@ static VOID MR3_AnimUnitRender( MR3UNIT_BALL *Uni, mr3ANIM *Ani )
  * ÂÎÇÂÐÀÙÀÅÌÎÅ ÇÍÀ×ÅÍÈÅ:
  *   (MR3UNIT *) óêàçàòåëü íà ñîçäàííûé îáúåêò àíèìàöèè.
  */
-MR3UNIT * MR3_UnitBallCreate( VOID )
+mr3UNIT * MR3_UnitBallCreate( VOID )
 {
   MR3UNIT_BALL *Uni;
 
@@ -91,7 +91,7 @@ MR3UNIT * MR3_UnitBallCreate( VOID )
   Uni->Close = (VOID *)MR3_AnimUnitClose;
   Uni->Response = (VOID *)MR3_AnimUnitResponse;
   Uni->Render = (VOID *)MR3_AnimUnitRender;
-  return (MR3UNIT *)Uni;
+  return (mr3UNIT *)Uni;
 } /* End of 'MR3_UnitBallCreate' function */
 
 /* END OF 'UBALL.C' FILE */

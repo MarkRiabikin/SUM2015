@@ -101,7 +101,7 @@ static VOID MR3_AnimUnitRender( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
  * ÂÎÇÂÐÀÙÀÅÌÎÅ ÇÍÀ×ÅÍÈÅ:
  *   (MR3UNIT *) óêàçàòåëü íà ñîçäàííûé îáúåêò àíèìàöèè.
  */
-MR3UNIT * MR3_UnitControlCreate( VOID )
+mr3UNIT * MR3_UnitControlCreate( VOID )
 {
   MR3UNIT_CTRL *Uni;
 
@@ -112,6 +112,6 @@ MR3UNIT * MR3_UnitControlCreate( VOID )
   Uni->Close = (VOID *)MR3_AnimUnitClose;
   Uni->Response = (VOID *)MR3_AnimUnitResponse;
   Uni->Render = (VOID *)MR3_AnimUnitRender;
-  return (MR3UNIT *)Uni;
+  return (mr3UNIT *)Uni;
 } /* End of 'MR3_UnitControlCreate' function */
 

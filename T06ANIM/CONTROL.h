@@ -9,6 +9,6 @@
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
  *   (MR3UNIT *) указатель на созданный объект анимации.
  */
-MR3UNIT * MR3_UnitControlCreate( VOID );
+mr3UNIT * MR3_UnitControlCreate( VOID );
 #endif /* __CONTROL_H_*/
 /* END OF 'CONTROL.H' FILE */
