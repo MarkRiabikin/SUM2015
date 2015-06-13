@@ -5,10 +5,15 @@
  */
 
 #include <stdio.h>
+#include <conio.h>
 #include <string.h>
 
 #include "anim.h"
 #include "render.h"
+
+#pragma comment(lib, "glew32s")
+#pragma comment(lib, "opengl32")
+#pragma comment(lib, "glu32")
 
 /* Матрицы */
 MATR
@@ -30,12 +35,6 @@ DBL
  *   (POINT) координаты в кадре.
  */
 UINT MR3_RndProg;
-
-typedef struct tagVERTEX
-{
-  VEC P;   
-  COLOR C; 
-} VERTEX;
 
 POINT MR3_RndWorldToScreen( VEC P )
 {
@@ -137,15 +136,22 @@ BOOL MR3_RndGObjLoad( mr3GOBJ *GObj, CHAR *FileName )
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, GObj->IBuf);
 
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(INT [3]) * GObj->NumOfF, Facets, GL_STATIC_DRAW);
+                                                    
+  /* задаем порядок данных */
+  /*                    layout,
+   *                       количество компонент,
+   *                          тип,
+   *                                    надо ли нормировать,
+   *                                           размер в байтах одного элемента буфера,
+   *                                                           смещение в байтах до начала данных */
+  glVertexAttribPointer(0, 3, GL_FLOAT, FALSE, sizeof(VERTEX), (VOID *)0); /* позиция */
+  glVertexAttribPointer(1, 4, GL_FLOAT, FALSE, sizeof(VERTEX), (VOID *)sizeof(VEC)); /* цвет */
 
-                                                     
-  glVertexAttribPointer(0, 3, GL_FLOAT, FALSE, sizeof(VERTEX), (VOID *)0); 
-  glVertexAttribPointer(1, 4, GL_FLOAT, FALSE, sizeof(VERTEX), (VOID *)sizeof(VEC));
-
-  
+  /* включаем нужные аттрибуты (layout) */
   glEnableVertexAttribArray(0);
   glEnableVertexAttribArray(1);
 
+  glBindVertexArray(0);
 
   free(V);
   return TRUE;

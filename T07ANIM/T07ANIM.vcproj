@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="T06ANIM"
+	Name="T07ANIM"
 	ProjectGUID="{985185F4-CDA0-467F-9993-485961A5B86E}"
-	RootNamespace="T05ANIM"
+	RootNamespace="T07ANIM"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -187,10 +187,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SHADERS.c"
-				>
-			</File>
-			<File
 				RelativePath=".\VEC.h"
 				>
 			</File>
@@ -206,11 +202,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\GEOM.c"
+					>
+				</File>
+				<File
+					RelativePath=".\PRIM.c"
+					>
+				</File>
+				<File
 					RelativePath=".\RENDER.c"
 					>
 				</File>
 				<File
 					RelativePath=".\RENDER.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SHADERS.c"
 					>
 				</File>
 			</Filter>

@@ -109,7 +109,7 @@ VOID MR3_AnimClose( VOID )
     MR3_Anim.Units[i] = NULL;
   }
 
-   MR3_ShaderFree(MR3_RndProg);
+  MR3_ShaderFree(MR3_RndProg);
   MR3_RndProg = 0;
 
   wglMakeCurrent(NULL, NULL);
@@ -138,6 +138,7 @@ VOID MR3_AnimResize( INT W, INT H )
   /* Сохранение размера */
   MR3_Anim.W = W;
   MR3_Anim.H = H;
+  glViewport(0, 0, W, H);
 
   ReleaseDC(MR3_Anim.hWnd, hDC);
   if (W > H)

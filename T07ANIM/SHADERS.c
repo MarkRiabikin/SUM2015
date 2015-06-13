@@ -10,7 +10,12 @@
 #include "anim.h"
 #include "render.h"
 
-
+/* Функция записи ошибок в файл.
+ * АРНУМЕНТЫ:
+ *   - текст ошибки:
+ *       CHAR *Text;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
+ */
 static VOID MR3_SaveLog( CHAR *Text )
 {
   FILE *F;
@@ -22,22 +27,32 @@ static VOID MR3_SaveLog( CHAR *Text )
   }
 } /* End of 'MR3_SaveLog' function */
 
-
+/* Функция загрузки текстового файла в память.
+ * АРНУМЕНТЫ:
+ *   - имея файла:
+ *       CHAR *FileName;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
+ *   (CHAR *) загруженный текст.
+ */
 static CHAR * MR3_TextLoad( CHAR *FileName )
 {
   FILE *F;
   CHAR *mem = NULL;
 
+  /* Открываем текстовый файл */
   if ((F = fopen(FileName, "r")) != NULL)
   {
     LONG len;
 
+    /* измеряем длину файла */
     fseek(F, 0, SEEK_END);
     len = ftell(F);
 
+    /* выделяем память под текст */
     if ((mem = malloc(len + 1)) != NULL)
     {
       fseek(F, 0, SEEK_SET);
+      /* загружаем файл в память */
       len = fread(mem, 1, len, F);
       mem[len] = 0;
     }
@@ -46,28 +61,39 @@ static CHAR * MR3_TextLoad( CHAR *FileName )
   return mem;
 } /* End of 'MR3_ShaderLoad' function */
 
-
+/* Функция загрузки шейдеров для одной программы.
+ * АРНУМЕНТЫ:
+ *   - префикс имени файла:
+ *       CHAR *FileNamePrefix;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
+ *   (UINT) номер загруженной программы.
+ */
 UINT MR3_ShaderLoad( CHAR *FileNamePrefix )
 {
   INT res, i;
   CHAR *txt;
+  INT NumOfShaders = 2;
   UINT
-    Shaders[2] = {0}, Prg = 0,
-    ShTypes[2] = {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER};
+    Shaders[2] = {0},
+    ShTypes[2] = {GL_VERTEX_SHADER, GL_FRAGMENT_SHADER},
+     Prg = 0;
   CHAR *Suff[2] = {"VERT", "FRAG"};
   BOOL isok = TRUE;
   static CHAR Buf[1000];
 
+  /* загружаем шейдера */
 
-  for (i = 0; i < 2; i++)
+  for (i = 0; i < NumOfShaders; i++)
   {
     sprintf(Buf, "%s.%s", FileNamePrefix, Suff[i]);
+    /* создаем в памяти шейдер */
     if ((Shaders[i] = glCreateShader(ShTypes[i])) == 0)
     {
       isok = FALSE;
       MR3_SaveLog("Error create shader");
       break;
     }
+    /* загружаем файл */
     if ((txt = MR3_TextLoad(Buf)) == NULL)
     {
       isok = FALSE;
@@ -75,13 +101,15 @@ UINT MR3_ShaderLoad( CHAR *FileNamePrefix )
       MR3_SaveLog(Buf);
       break;
     }
-
+    /* закрепляем текст */
     glShaderSource(Shaders[i], 1, &txt, NULL);
     free(txt);
+    /* компилируем шейдер */
     glCompileShader(Shaders[i]);
     glGetShaderiv(Shaders[i], GL_COMPILE_STATUS, &res);
     if (res != 1)
-    { 
+    {
+      /* ошибка компиляции */
       glGetShaderInfoLog(Shaders[i], sizeof(Buf), &res, Buf);
       MR3_SaveLog(Buf);
       isok = FALSE;
@@ -90,27 +118,27 @@ UINT MR3_ShaderLoad( CHAR *FileNamePrefix )
   }
 
   if (isok)
-   
+    /* Инициализируем программу - набор шейдеров */
     if ((Prg = glCreateProgram()) == 0)
       isok = FALSE;
     else
     {
-
-      for (i = 0; i < 2; i++)
+      /* присоединяем к программе шейдера */
+      for (i = 0; i < NumOfShaders; i++)
         if (Shaders[i] != 0)
           glAttachShader(Prg, Shaders[i]);
-    
+      /* компонуем программу */
       glLinkProgram(Prg);
       glGetProgramiv(Prg, GL_LINK_STATUS, &res);
       if (res != 1)
       {
-        
+        /* ошибка компиляции */
         glGetProgramInfoLog(Prg, sizeof(Buf), &res, Buf);
         MR3_SaveLog(Buf);
         isok = FALSE;
       }
     }
-  
+  /* обработка ошибок */
   if (!isok)
   {
     for (i = 0; i < 2; i++)
@@ -127,9 +155,29 @@ UINT MR3_ShaderLoad( CHAR *FileNamePrefix )
   return Prg;
 } /* End of 'MR3_ShaderLoad' function */
 
-
+/* Функция уничтодения шейдеров для программы.
+ * АРНУМЕНТЫ:
+ *   - номер программы:
+ *       UINT PrgId;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
+ */
 VOID MR3_ShaderFree( UINT PrgId )
 {
+  UINT i, n, shdrs[5];
+
+  if (PrgId == 0)
+    return;
+
+  /* получаем присоединенные шейдера */
+  glGetAttachedShaders(PrgId, 5, &n, shdrs);
+
+  /* удаляем */
+  for (i = 0; i < n; i++)
+  {
+    glDetachShader(PrgId, shdrs[i]);
+    glDeleteShader(shdrs[i]);
+  }
+  glDeleteProgram(PrgId);
 } /* End of 'MR3_ShaderFree' function */
 
 /* END OF 'RENDER.C' FILE */

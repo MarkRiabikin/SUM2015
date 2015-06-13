@@ -49,7 +49,8 @@ static VOID MR3_AnimUnitClose( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
  * бнгбпюыюелне гмювемхе: мЕР. 
  */
 static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
-{
+{  
+  INT i, j;
   MR3_RndMatrView = MatrView(VecSet(8, 8, 8),
                              VecSet(0, 0, 0),
                              VecSet(0, 1, 0));

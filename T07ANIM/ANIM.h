@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "def.h"
+#include "vec.h"
 
 /* Максимальное количество элементов анимации */
 #define MR3_MAX_UNITS 3000
@@ -15,15 +16,24 @@ typedef struct
 {
   HWND hWnd;          /* Окно вывода */
   INT W, H;           /* Размер окна вывода */
-  HBITMAP hBmFrame;   /* Буфер кадра */
-  HDC hDC;            /* Контекст вывода */
-  BOOL IsPause;        /* значение паузы*/
-  INT64  
-    GlobalTime,
-    GlobalDeltaTime,
-    DeltaTime,
-    Time,
-    FPS;
+  HDC hDC;            /* Контекст окна вывода */
+  HGLRC hGLRC;        /* Контекст рендеринга */
+
+  /* Массив элементов анимации и их количество */
+  mr3UNIT *Units[MR3_MAX_UNITS]; 
+  INT NumOfUnits;
+
+  /* Подсистема синхронизации */
+  DBL
+    Time,            /* время в секундах со старта анимации */
+    GlobalTime,      /* время -"-, но без паузы */
+    DeltaTime,       /* межкадровое время в секундах */
+    GlobalDeltaTime, /* межкадровое время в секундах без паузы */
+    FPS;             /* количество кадров в секунду */
+  BOOL
+    IsPause;         /* флаг паузы */
+
+  /* Подсистема ввода */
   BYTE
     Keys[256],       /* Сотояние клавиш клавиатуры и мыши */
     KeysOld[256],    /* Сотояние клавиш на предыдущем кадре */
@@ -39,11 +49,6 @@ typedef struct
     JPOV;            /* Переключатель POV - 0..8 */
   DBL
     JX, JY, JZ, JR, JU, JV; /* Оси джойстика (-1.0 .. 1.0*/
-
-  /* Массив элементов анимации и их количество */
-  mr3UNIT *Units[MR3_MAX_UNITS]; 
-  INT NumOfUnits;
-
 } mr3ANIM;
 
 /* Системный контекст анимации */

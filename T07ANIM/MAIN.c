@@ -113,7 +113,8 @@ LRESULT CALLBACK MainWindowFunc( HWND hWnd, UINT Msg,
   {
   case WM_CREATE:
     SetTimer(hWnd, 30, 1, NULL);
-    MR3_AnimInit(hWnd);
+    if (!MR3_AnimInit(hWnd))
+      return -1;
     return 0;
   case WM_SIZE:
     MR3_AnimResize(LOWORD(lParam), HIWORD(lParam));
