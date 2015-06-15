@@ -1,7 +1,20 @@
+#ifndef __VEC_H_
+#define __VEC_H_
+
 #include <math.h>
-#include <windows.h>
+#include "def.h"
 #define PI 3.14159265358979323846
 #define D2R(A) ((A) * PI / 180.0)
+
+#define  MR3_UNIT_MATR \
+  {                    \
+    {                  \
+      {1, 0, 0, 0},    \
+      {0, 1, 0, 0},    \
+      {0, 0, 1, 0},    \
+      {0, 0, 0, 1}     \
+    }                  \
+  }
 
 /* базовый вещественный тип */
 typedef double DBL;
@@ -16,18 +29,54 @@ typedef struct tagVEC
 /* тип для матрицы - массив в структуре */
 typedef struct tagMATR
 {
-  DBL A[4][4];
+  FLT A[4][4];
 } MATR;
 
-#define  MR3_UNIT_MATR \
-  {                    \
-    {                  \
-      {1, 0, 0, 0},    \
-      {0, 1, 0, 0},    \
-      {0, 0, 1, 0},    \
-      {0, 0, 0, 1}     \
-    }                  \
-  }
+typedef struct tagCOLOR
+{
+  FLT R, G, B, A; /* компоненты цвета + прозрачность (0..1) */
+} COLOR;
+
+/* Функция получения случайного числа в диапазоне [0.0 .. 1.0].
+ * АРГУМЕНТЫ: Нет.
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
+ *   (DBL) итоговое случайное число.
+ */
+__inline DBL Rnd0( VOID )
+{
+  return (DBL)rand() / RAND_MAX;
+} /* End of 'Rnd0' function */
+
+/* Функция получения случайного числа в диапазоне [-1.0 .. 1.0].
+ * АРГУМЕНТЫ: Нет.
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
+ *   (DBL) итоговое случайное число.
+ */
+__inline DBL Rnd1( VOID )
+{
+  return 2.0 * rand() / RAND_MAX - 1;
+} /* End of 'Rnd1' function */
+
+
+/***
+ * Функции работы с цветом
+ ***/
+
+
+/* Функция построения цвета.
+ * АРГУМЕНТЫ:
+ *   - цветовые компоненты:
+ *       FLT R, G, B, A;
+ * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
+ *   (COLOR) собранное в один тип значение цвета.
+ */
+__inline COLOR ColorSet( FLT R, FLT G, FLT B, FLT A )
+{
+  COLOR c = {R, G, B, A};
+
+  return c;
+} /* End of 'ColorSet' function */
+
 
 //!!!
 __inline MATR MatrTranslate( DBL Dx, DBL Dy, DBL Dz )
@@ -363,4 +412,6 @@ __inline MATR MatrFrustum( DBL Left, DBL Right, DBL Top, DBL Bottom, DBL Near, D
 
   return m;
 } /* End of 'MatrFrustum' function */
+
+#endif /* __VEC_H_ */
 /* END OF 'VEC' FILE */

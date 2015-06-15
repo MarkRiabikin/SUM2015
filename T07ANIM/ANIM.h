@@ -56,11 +56,6 @@ extern mr3ANIM MR3_Anim;
 /* Глобальная переменная - счетчик прокрутки колеса мыши */
 extern INT MR3_MouseWheel;
 
-MATR
-  MR3_RndMatrWorld = MR3_UNIT_MATR,
-  MR3_RndMatrView = MR3_UNIT_MATR,
-  MR3_RndMatrWorldView = MR3_UNIT_MATR;
-
 
 /* Базовые поля объекта анимации:
  * - размер структуры для наследования

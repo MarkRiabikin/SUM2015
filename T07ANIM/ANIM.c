@@ -78,13 +78,21 @@ BOOL MR3_AnimInit( HWND hWnd )
 
   MR3_RndProg = MR3_ShaderLoad("TEST");
 
+  glActiveTexture(GL_TEXTURE0);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  glActiveTexture(GL_TEXTURE1);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
   QueryPerformanceFrequency(&li);
   TimeFreq = li.QuadPart;
   QueryPerformanceCounter(&li);
   TimeStart = TimeOld = TimeFPS = li.QuadPart;
   MR3_Anim.IsPause = FALSE;
   FrameCounter = 0;
-  
+
   GetCursorPos(&pt);
   ScreenToClient(MR3_Anim.hWnd, &pt);
   MR3_MouseOldX = pt.x;
@@ -118,7 +126,6 @@ VOID MR3_AnimClose( VOID )
   ReleaseDC(MR3_Anim.hWnd, MR3_Anim.hDC);
 } /* End of 'MR3_AnimClose' function */
 
-} /* End of 'MR3_AnimClose' function */
 
 /* Функция обработки изменения размера области вывода.
  * АРГУМЕНТЫ:
@@ -128,19 +135,11 @@ VOID MR3_AnimClose( VOID )
  */
 VOID MR3_AnimResize( INT W, INT H )
 {
-  HDC hDC = GetDC(MR3_Anim.hWnd);
-
-  /* Перевыделение памяти у буфера кадра */
-  DeleteObject(MR3_Anim.hBmFrame);
-  MR3_Anim.hBmFrame = CreateCompatibleBitmap(hDC, W, H);
-  SelectObject(MR3_Anim.hDC, MR3_Anim.hBmFrame);
-
   /* Сохранение размера */
   MR3_Anim.W = W;
   MR3_Anim.H = H;
   glViewport(0, 0, W, H);
 
-  ReleaseDC(MR3_Anim.hWnd, hDC);
   if (W > H)
     MR3_RndWp = (DBL)W / H * 3, MR3_RndHp = 3;
   else

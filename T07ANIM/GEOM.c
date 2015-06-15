@@ -138,8 +138,8 @@ BOOL MR3_GeomLoad( mr3GEOM *G, CHAR *FileName )
     /* конвертируем геометрию */
     for (j = 0; j < nv; j++)
     {
-      Vert[j].P = VecMulMatr(Vert[j].P, MR3_RndPrimMatrConvert);
-      Vert[j].N = VecMulMatr3(Vert[j].N, M);
+      Vert[j].P = PointTransform(Vert[j].P, MR3_RndPrimMatrConvert);
+      Vert[j].N = PointTransform(Vert[j].N, M);
     }
     fread(Ind, sizeof(INT), ni, F);
 

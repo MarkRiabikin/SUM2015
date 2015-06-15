@@ -202,14 +202,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\GEOM.c"
-					>
-				</File>
-				<File
-					RelativePath=".\PRIM.c"
-					>
-				</File>
-				<File
 					RelativePath=".\RENDER.c"
 					>
 				</File>
@@ -221,6 +213,18 @@
 					RelativePath=".\SHADERS.c"
 					>
 				</File>
+				<Filter
+					Name="Geometry"
+					>
+					<File
+						RelativePath=".\GEOM.c"
+						>
+					</File>
+					<File
+						RelativePath=".\PRIM.c"
+						>
+					</File>
+				</Filter>
 			</Filter>
 			<Filter
 				Name="UNIT"

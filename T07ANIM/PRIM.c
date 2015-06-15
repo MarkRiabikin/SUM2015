@@ -10,6 +10,13 @@
 /* Матрица изменения примитива при создании */
 MATR MR3_RndPrimMatrConvert = MR3_UNIT_MATR;
 
+
+MATR
+  MR3_RndMatrWorld = MR3_UNIT_MATR,
+  MR3_RndMatrView = MR3_UNIT_MATR,
+  MR3_RndMatrWorldView = MR3_UNIT_MATR,
+  MR3_RndMatrWorldViewProj = MR3_UNIT_MATR;
+
 /* Функция создания примитива.
  * АРГУМЕНТЫ:
  *   - указатель на примитив:
@@ -101,7 +108,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   INT loc;
   MATR M;
 
-  MR3_RndMatrWorldViewProj = MatrMulMatr(MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView), MR3_RndMatrProj);
+  MR3_RndMatrWorldViewProj = MatrMulMatr(MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView), MR3_RndMatrWorldView);
 
   /* оставлено для отлдадки, если нет шейдеров */
   glLoadMatrixf(MR3_RndMatrWorldViewProj.A[0]);
@@ -112,13 +119,13 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
 
   loc = glGetUniformLocation(MR3_RndProg, "MatrWorld");
   if (loc != -1)
-    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorld.A[0]);
+    glUniformMatrix4fv(loc, 1, FALSE, &(MR3_RndMatrWorld.A[0][0]));
   loc = glGetUniformLocation(MR3_RndProg, "MatrView");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrView.A[0]);
-  loc = glGetUniformLocation(MR3_RndProg, "MatrProj");
+  loc = glGetUniformLocation(MR3_RndProg, "MatrWorldView");
   if (loc != -1)
-    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrProj.A[0]);
+    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorldView.A[0]);
   loc = glGetUniformLocation(MR3_RndProg, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorldViewProj.A[0]);

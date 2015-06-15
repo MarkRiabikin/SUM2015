@@ -11,20 +11,37 @@
 typedef struct tagmr3UNIT_MODEL
 {
   MR3_UNIT_BASE_FIELDS;
-  mr3GOBJ Model; 
+
+  mr3GEOM Model; 
+  mr3GEOM Geom; 
+  mr3PRIM Pr;
+  INT TextId;  
 } mr3UNIT_MODEL;
 
-/* Функция инициализации объекта анимации.
- * АРГУМЕНТЫ:
- *   - указатель на "model" - сам объект анимации:
- *       MR3UNIT_MODEL *Uni;
- *   - указатель на контекст анимации:
- *       mr3ANIM *Ani;
- * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
- */
+
 static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 {
-  MR3_RndGObjLoad(&Uni->Model, "cow.object");
+  mr3VERTEX V[]= 
+  {
+    {{0, 0, 0}, {0, 0}, {0, 0, 1}, {1, 1, 1, 1}},
+    {{1, 0, 0}, {5, 0}, {0, 0, 1}, {1, 0, 1, 1}},
+    {{0, 1, 0}, {0, 5}, {0, 0, 1}, {1, 1, 0, 1}},
+    {{1, 1, 0}, {5, 5}, {0, 0, 1}, {1, 1, 0, 1}},
+  };
+  INT I[] = {0, 1, 2, 2, 1, 3};
+  BYTE txt[2][2][3] =
+  {
+    {{255, 255, 255}, {0, 0, 0}},
+    {{0, 0, 0}, {255, 255, 255}}
+  };
+
+  Uni->TextId = MR3_TextureLoad("M.BMP");
+
+  MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
+
+  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(5, 5, 5), MatrRotateX(-90));
+  //MR3_GeomLoad(&Uni->Model, "NISPF.g3d");
+  MR3_GeomLoad(&Uni->Geom, "avent.G3D");
 } /* End of 'MR3_AnimUnitInit' function */
 
 /* Функция деинициализации объекта анимации.
@@ -38,8 +55,11 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 
 static VOID MR3_AnimUnitClose( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 {
-  MR3_RndGObjFree(&Uni->Model);
+  MR3_GeomFree(&Uni->Model);
+  MR3_GeomFree(&Uni->Geom);
+  MR3_PrimFree(&Uni->Pr);
 } /* End of 'MR3_AnimUnitClose' function */
+
 
 /* Функция создания объекта анимации.
  *   - указатель на "model" - сам объект анимации:
@@ -71,7 +91,7 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
           MatrRotateY(30 * Ani->Time + Ani->JR * 180)),
           MatrTranslate(j * 1.30, 0, i * 1.30 + 100 * Ani->JZ));
       glColor3d(i & 1, j & 1, 1 - ((i & 1) + (j & 1)) / 2);
-      MR3_RndGObjDraw(&Uni->Model);
+      MR3_PrimDraw(&Uni->Pr);
     }
 } /* End of 'MR3_AnimUnitRender' function */
 
