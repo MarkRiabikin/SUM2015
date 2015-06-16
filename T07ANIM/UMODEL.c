@@ -35,7 +35,7 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
     {{0, 0, 0}, {255, 255, 255}}
   };
 
-  Uni->TextId = MR3_TextureLoad("M.BMP");
+  //Uni->TextId = MR3_TextureLoad("M.BMP");
 
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
