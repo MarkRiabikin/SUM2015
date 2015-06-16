@@ -69,15 +69,38 @@ VOID MR3_GeomDraw( mr3GEOM *G )
 {
   INT i, loc;
 
+  /* посылаем количество частей */
+  glUseProgram(MR3_RndProg);
+  loc = glGetUniformLocation(MR3_RndProg, "TotalParts");
+  if (loc != -1)
+    glUniform1f(loc, G->NumOfPrimitives);
+  glUseProgram(0);
+
+  /* рисуем непрозрачные объекты */
   for (i = 0; i < G->NumOfPrimitives; i++)
-  {
-    glUseProgram(MR3_RndProg);
-    loc = glGetUniformLocation(MR3_RndProg, "PartNo");
-    if (loc != -1)
-      glUniform1f(loc, i);
-    glUseProgram(0);
-    MR3_PrimDraw(&G->Prims[i]);
-  }
+    if (MR3_MtlLib[G->Prims[i].MtlNo].Kt == 1)
+    {
+      /* посылаем номер текущей части */
+      glUseProgram(MR3_RndProg);
+      loc = glGetUniformLocation(MR3_RndProg, "PartNo");
+      if (loc != -1)
+        glUniform1f(loc, i);
+      glUseProgram(0);
+      MR3_PrimDraw(&G->Prims[i]);
+    }
+
+  /* рисуем прозрачные объекты */
+  for (i = 0; i < G->NumOfPrimitives; i++)
+    if (MR3_MtlLib[G->Prims[i].MtlNo].Kt != 1)
+    {
+      /* посылаем номер текущей части */
+      glUseProgram(MR3_RndProg);
+      loc = glGetUniformLocation(MR3_RndProg, "PartNo");
+      if (loc != -1)
+        glUniform1f(loc, i);
+      glUseProgram(0);
+      MR3_PrimDraw(&G->Prims[i]);
+    }
 } /* End of 'MR3_GeomDraw' function */
 
 /* Функция загрузки геометрического объекта из G3D файла.
@@ -96,6 +119,14 @@ BOOL MR3_GeomLoad( mr3GEOM *G, CHAR *FileName )
   CHAR Sign[4];
   MATR M;
   static CHAR MtlName[300];
+  static CHAR
+    path_buffer[_MAX_PATH],
+    drive[_MAX_DRIVE],
+    dir[_MAX_DIR],
+    fname[_MAX_FNAME],
+    ext[_MAX_EXT];
+
+  _splitpath(FileName, drive, dir, fname, ext);
 
   memset(G, 0, sizeof(mr3GEOM));
   if ((F = fopen(FileName, "rb")) == NULL)
@@ -114,6 +145,10 @@ BOOL MR3_GeomLoad( mr3GEOM *G, CHAR *FileName )
   /* читаем количество примитивов в объекте */
   fread(&n, 4, 1, F);
   fread(MtlName, 1, 300, F);
+
+  /* читаем и загружаем библиотеку материалов */
+  _makepath(path_buffer, drive, dir, MtlName, "");
+  MR3_MtlLoad(path_buffer);
 
   /* читаем примитивы */
   for (i = 0; i < n; i++)
@@ -139,12 +174,13 @@ BOOL MR3_GeomLoad( mr3GEOM *G, CHAR *FileName )
     for (j = 0; j < nv; j++)
     {
       Vert[j].P = PointTransform(Vert[j].P, MR3_RndPrimMatrConvert);
-      Vert[j].N = PointTransform(Vert[j].N, M);
+      Vert[j].N = VectorTransform(Vert[j].N, M);
     }
     fread(Ind, sizeof(INT), ni, F);
 
     /* заносим в примитив */
     MR3_PrimCreate(&P, MR3_PRIM_TRIMESH, nv, ni, Vert, Ind);
+    P.MtlNo = MR3_MtlFind(MtlName);
 
     free(Vert);
 

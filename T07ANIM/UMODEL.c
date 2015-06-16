@@ -35,13 +35,16 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
     {{0, 0, 0}, {255, 255, 255}}
   };
 
-  //Uni->TextId = MR3_TextureLoad("M.BMP");
-
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
+  MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrRotateX(0));
+  MR3_GeomLoad(&Uni->Model, "Q:\\Models\\Avent\\avent.G3D");
+
   //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(5, 5, 5), MatrRotateX(-90));
-  //MR3_GeomLoad(&Uni->Model, "NISPF.g3d");
-  MR3_GeomLoad(&Uni->Geom, "avent.G3D");
+  //MR3_GeomLoad(&Uni->Model, "Q:\\Models\\Nissan_Pathfinder\\NISPF.G3D");
+
+  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(3, 3, 3), MatrRotateX(-90));
+  //MR3_GeomLoad(&Uni->Geom, "Models\\X6\\X6.G3D");
 } /* End of 'MR3_AnimUnitInit' function */
 
 /* Функция деинициализации объекта анимации.
@@ -91,8 +94,15 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
           MatrRotateY(30 * Ani->Time + Ani->JR * 180)),
           MatrTranslate(j * 1.30, 0, i * 1.30 + 100 * Ani->JZ));
       glColor3d(i & 1, j & 1, 1 - ((i & 1) + (j & 1)) / 2);
-      MR3_PrimDraw(&Uni->Pr);
+      MR3_GeomDraw(&Uni->Model);
     }
+  MR3_RndMatrWorld = MatrRotateY(30 * Ani->Time);
+  //MatrMulMatr(MatrRotateZ(30 * sin(Ani->Time * 3.0)), MatrRotateY(30 * Ani->Time));
+  MR3_GeomDraw(&Uni->Geom);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, Uni->TextId);
+  MR3_PrimDraw(&Uni->Pr);
 } /* End of 'MR3_AnimUnitRender' function */
 
 /* creating of model.

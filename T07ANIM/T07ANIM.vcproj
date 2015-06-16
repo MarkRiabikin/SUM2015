@@ -221,6 +221,10 @@
 						>
 					</File>
 					<File
+						RelativePath=".\MTLLIB.c"
+						>
+					</File>
+					<File
 						RelativePath=".\PRIM.c"
 						>
 					</File>

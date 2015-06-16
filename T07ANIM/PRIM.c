@@ -10,13 +10,6 @@
 /* Матрица изменения примитива при создании */
 MATR MR3_RndPrimMatrConvert = MR3_UNIT_MATR;
 
-
-MATR
-  MR3_RndMatrWorld = MR3_UNIT_MATR,
-  MR3_RndMatrView = MR3_UNIT_MATR,
-  MR3_RndMatrWorldView = MR3_UNIT_MATR,
-  MR3_RndMatrWorldViewProj = MR3_UNIT_MATR;
-
 /* Функция создания примитива.
  * АРГУМЕНТЫ:
  *   - указатель на примитив:
@@ -119,11 +112,11 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
 
   loc = glGetUniformLocation(MR3_RndProg, "MatrWorld");
   if (loc != -1)
-    glUniformMatrix4fv(loc, 1, FALSE, &(MR3_RndMatrWorld.A[0][0]));
+    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorld.A[0]);
   loc = glGetUniformLocation(MR3_RndProg, "MatrView");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrView.A[0]);
-  loc = glGetUniformLocation(MR3_RndProg, "MatrWorldView");
+  loc = glGetUniformLocation(MR3_RndProg, "MatrProj");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorldView.A[0]);
   loc = glGetUniformLocation(MR3_RndProg, "MatrWVP");
@@ -135,6 +128,11 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, M.A[0]);
 
+  M = MatrTranspose(MatrInverse(MR3_RndMatrWorld));
+  loc = glGetUniformLocation(MR3_RndProg, "MatrWInverse");
+  if (loc != -1)
+    glUniformMatrix4fv(loc, 1, FALSE, M.A[0]);
+
   M = MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView);
   loc = glGetUniformLocation(MR3_RndProg, "MatrWV");
   if (loc != -1)
@@ -143,6 +141,32 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   loc = glGetUniformLocation(MR3_RndProg, "Time");
   if (loc != -1)
     glUniform1f(loc, MR3_Anim.Time);
+
+  /* Применение материала */
+  loc = glGetUniformLocation(MR3_RndProg, "Ka");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &MR3_MtlLib[Prim->MtlNo].Ka.X);
+  loc = glGetUniformLocation(MR3_RndProg, "Kd");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &MR3_MtlLib[Prim->MtlNo].Kd.X);
+  loc = glGetUniformLocation(MR3_RndProg, "Ks");
+  if (loc != -1)
+    glUniform3fv(loc, 1, &MR3_MtlLib[Prim->MtlNo].Ks.X);
+  loc = glGetUniformLocation(MR3_RndProg, "Kp");
+  if (loc != -1)
+    glUniform1f(loc, MR3_MtlLib[Prim->MtlNo].Kp);
+  loc = glGetUniformLocation(MR3_RndProg, "Kt");
+  if (loc != -1)
+    glUniform1f(loc, MR3_MtlLib[Prim->MtlNo].Kt);
+
+  loc = glGetUniformLocation(MR3_RndProg, "IsTextureUse");
+  if (MR3_MtlLib[Prim->MtlNo].TexId == 0)
+    glUniform1f(loc, 0);
+  else
+  {
+    glUniform1f(loc, 1);
+    glBindTexture(GL_TEXTURE_2D, MR3_MtlLib[Prim->MtlNo].TexId);
+  }
 
   glPrimitiveRestartIndex(0xFFFFFFFF);
   if (Prim->Type == MR3_PRIM_GRID)

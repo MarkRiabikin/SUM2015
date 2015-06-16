@@ -242,7 +242,7 @@ __inline VEC PointTransform( VEC V, MATR M )
   return VecSet((V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0]) / w,
                 (V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1]) / w,
                 (V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]) / w);
-} /* End of 'VecMulMatr' function */
+} /* End of 'PointTransform' function */
 
 /* Функция умножения свободного вектора на матрицу (учитывается только ориентация).
  * АРГУМЕНТЫ:
@@ -258,7 +258,7 @@ __inline VEC VectorTransform( VEC V, MATR M )
   return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0],
                 V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1],
                 V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2]);
-} /* End of 'VecMulMatr3' function */
+} /* End of 'VectorTransform' function */
 
 /* Функция умножения вектора на матрицу (без учета однородной координаты).
  * АРГУМЕНТЫ:
@@ -269,12 +269,12 @@ __inline VEC VectorTransform( VEC V, MATR M )
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:
  *   (VEC) результирующий вектор.
  */
-__inline VEC VecMulMatr43( VEC V, MATR M )
+__inline VEC PointTransform43( VEC V, MATR M )
 {
   return VecSet(V.X * M.A[0][0] + V.Y * M.A[1][0] + V.Z * M.A[2][0] + M.A[3][0],
                 V.X * M.A[0][1] + V.Y * M.A[1][1] + V.Z * M.A[2][1] + M.A[3][1],
                 V.X * M.A[0][2] + V.Y * M.A[1][2] + V.Z * M.A[2][2] + M.A[3][2]);
-} /* End of 'VecMulMatr43' function */
+} /* End of 'PointTransform43' function */
 
 /***
  * Функции работы с матрицами
