@@ -38,7 +38,7 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
   MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrRotateX(0));
-  MR3_GeomLoad(&Uni->Model, "Q:\\Models\\Avent\\avent.G3D");
+  MR3_GeomLoad(&Uni->Model, /*"avent.G3D"*/ "Q:\\Models\\Avent\\avent.G3D" );
 
   //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(5, 5, 5), MatrRotateX(-90));
   //MR3_GeomLoad(&Uni->Model, "Q:\\Models\\Nissan_Pathfinder\\NISPF.G3D");
@@ -83,6 +83,8 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
   if (Ani->KeysClick['Q'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   for (i = 0; i < 1; i++)
     for (j = 0; j < 1; j++)

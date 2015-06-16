@@ -35,7 +35,7 @@ vec4 Shade( vec3 P, vec3 N )
   float a = 1;
   vec3 color = vec3(0, 0, 0);
   vec3 L = normalize(vec3(1, 1, 1));
-  vec3 V = -vec3(-MatrView[3][0], -MatrView[3][1], -MatrView[3][2]);
+  vec3 V = -vec3(-MatrView[3][0], -MatrView[3][1], -MatrView[3][2]); //  normalize(vec3(MatrWVInverse * vec4(0, 0, 0, 1)));
 
   // разворачиваем нормаль, если смотрим в "тыл" треугольнику
   //N = faceforward(N, V, N);

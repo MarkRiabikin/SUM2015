@@ -6,6 +6,7 @@
 
 #include "anim.h"
 #include "render.h"
+#include "image.h"
 
 /* ћатрица изменени€ примитива при создании */
 MATR MR3_RndPrimMatrConvert = MR3_UNIT_MATR;

@@ -187,6 +187,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\TEST.FRAG"
+				>
+			</File>
+			<File
+				RelativePath=".\TEST.VERT"
+				>
+			</File>
+			<File
 				RelativePath=".\VEC.h"
 				>
 			</File>
@@ -226,6 +234,18 @@
 					</File>
 					<File
 						RelativePath=".\PRIM.c"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="image"
+					>
+					<File
+						RelativePath=".\IMAGE.c"
+						>
+					</File>
+					<File
+						RelativePath=".\IMAGE.h"
 						>
 					</File>
 				</Filter>
