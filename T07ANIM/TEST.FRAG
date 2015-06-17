@@ -77,6 +77,5 @@ void main( void )
   if (Kt != 1)
     ;//discard;
   OutColor = DrawColor * Shade(DrawPosition.xyz, DrawNormal);
-  OutColor = vec4(1, 0, 1, 1);
 }
 

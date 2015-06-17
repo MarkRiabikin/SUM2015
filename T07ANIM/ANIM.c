@@ -85,6 +85,9 @@ BOOL MR3_AnimInit( HWND hWnd )
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   QueryPerformanceFrequency(&li);
   TimeFreq = li.QuadPart;
   QueryPerformanceCounter(&li);

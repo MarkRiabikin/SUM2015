@@ -38,7 +38,7 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
   MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrRotateX(0));
-  MR3_GeomLoad(&Uni->Model, /*"avent.G3D"*/ "Q:\\Models\\Avent\\avent.G3D" );
+  MR3_GeomLoad(&Uni->Model, /*"avent.G3D"*/ "E:\\Models\\Avent\\avent.G3D" );
 
 } /* End of 'MR3_AnimUnitInit' function */
 
@@ -77,23 +77,22 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
   if (Ani->KeysClick['Q'])
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+  if (Ani->KeysClick['P'])
+    MR3_AnimSetPause(!Ani->IsPause);
   glEnable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+ 
   for (i = 0; i < 1; i++)
     for (j = 0; j < 1; j++)
     {
       MR3_RndMatrWorld =
         MatrMulMatr(MatrMulMatr(MatrMulMatr(
-          MatrTranslate(Ani->JX * 59, Ani->JY * 88, 0),
+         MatrTranslate(Ani->JX * 59, Ani->JY * 88, 0),
           MatrScale(0.1, 0.1, 0.1)),
-          MatrRotateY(30 * Ani->Time + Ani->JR * 180)),
+          MatrRotateY(0.5 * Ani->Time + Ani->JR * 180)),
           MatrTranslate(j * 1.30, 0, i * 1.30 + 100 * Ani->JZ));
-      glColor3d(i & 1, j & 1, 1 - ((i & 1) + (j & 1)) / 2);
       MR3_GeomDraw(&Uni->Model);
     }
-  MR3_RndMatrWorld = MatrRotateY(30 * Ani->Time);
+  //MR3_RndMatrWorld = MatrRotateY(30 * Ani->Time);
   //MatrMulMatr(MatrRotateZ(30 * sin(Ani->Time * 3.0)), MatrRotateY(30 * Ani->Time));
   MR3_GeomDraw(&Uni->Geom);
 
