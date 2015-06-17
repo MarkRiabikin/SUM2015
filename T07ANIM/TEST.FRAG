@@ -30,13 +30,14 @@ uniform vec3 Kd;
 uniform vec3 Ks;
 uniform float Kp;
 uniform float Kt;
+//uniform 
 
 /*  */
 uniform float IsTextureUse;
 uniform sampler2D DrawTexture;
 
 
-/*  */
+
 vec4 Shade( vec3 P, vec3 N )
 {
   float a = 1;
@@ -69,13 +70,14 @@ vec4 Shade( vec3 P, vec3 N )
   if (rl > 0)
     color += Ks * pow(rl, Kp);
 
-  return vec4(0.6 * color, (Kt * a));
+  return vec4(1 * color, (Kt * a));
 }
 
 void main( void )
 {
-  if (Kt != 1)
-    ;//discard;
+  //if(PartNo != 26)  discard;
+  
   OutColor = DrawColor * Shade(DrawPosition.xyz, DrawNormal);
+  //OutColor = vec4(0, 0, 0, 1);
 }
 

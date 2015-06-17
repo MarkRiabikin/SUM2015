@@ -291,6 +291,8 @@ __inline VEC PointTransform43( VEC V, MATR M )
   }               \
 }
 
+#define MR3_RndPrimDefaultColor ColorSet(1, 1, 1, 1);
+
 /* Функция установки матрицы в единичную (отсутствие преобразования СК).
  * АРГУМЕНТЫ: Нет.
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ:

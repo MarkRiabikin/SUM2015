@@ -19,6 +19,8 @@ uniform mat4 MatrWV;
 uniform mat4 MatrWVInverse;
 uniform mat4 MatrWInverse;
 uniform float Time;
+uniform float PartNo;
+uniform float Rand;
 
 // выходные параметры
 out vec4 DrawColor;
@@ -28,7 +30,21 @@ out vec2 DrawTexCoord;
 
 void main( void )
 {
-  gl_Position = MatrWVP * MatrWorld * vec4(InPosition * 15, 1);
+
+  if(PartNo != 10 && PartNo != 11)
+  {
+    float dx = Rand * 1 * abs(sin(Time*40)) * PartNo;
+    float dy = Rand * 1 * abs(sin(Time*40)) * PartNo;
+    float dz = Rand * 1 * abs(sin(Time*40)) * PartNo;
+    mat4 M = transpose(mat4(vec4(1 ,0  , 0 , 0),
+  			  vec4(0 ,1  , 0 , 0),
+    			  vec4(0 ,0  , 1 , 0),
+    			  vec4(dx, dy, dz, 1))); 
+    
+    gl_Position = MatrWVP * MatrWorld * M * vec4(InPosition * 10, 1);
+  }
+  else
+    gl_Position = MatrWVP * MatrWorld * vec4(InPosition * 10, 1);
   DrawNormal = mat3(MatrWInverse) * InNormal;
   DrawPosition = vec3(MatrWorld * vec4(InPosition, 1));
   DrawColor = InColor * 3.3;

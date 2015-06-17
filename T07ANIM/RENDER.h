@@ -186,7 +186,7 @@ VOID MR3_PrimFree( mr3PRIM *Prim );
  *       mr3PRIM *Prim;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_PrimDraw( mr3PRIM *Prim );
+VOID MR3_PrimDraw( mr3PRIM *Prim, INT i );
 
 /* Функция создания примитива плоскость.
  * АРГУМЕНТЫ:

@@ -37,8 +37,11 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
-  MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrRotateX(0));
-  MR3_GeomLoad(&Uni->Model, /*"avent.G3D"*/ "E:\\Models\\Avent\\avent.G3D" );
+  MR3_TextureLoad("destroy.bmp");
+  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(1, 1, 1), MatrTranslate(-50, 0, 50));
+  //R3_PrimCreatePlane(&Uni->Pr, VecSet(1000, 0, 0), VecSet(0, 0, 1000), 30, 30);
+  MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrTranslate(0, 0, 0));
+  MR3_GeomLoad(&Uni->Model, "E:\\Models\\Avent\\avent.G3D" );
 
 } /* End of 'MR3_AnimUnitInit' function */
 
@@ -69,7 +72,7 @@ static VOID MR3_AnimUnitClose( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 {  
   INT i, j;
-  MR3_RndMatrView = MatrView(VecSet(8, 8, 8),
+  MR3_RndMatrView = MatrView(VecSet(0, 5, 30),
                              VecSet(0, 0, 0),
                              VecSet(0, 1, 0));
 
@@ -79,6 +82,7 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   if (Ani->KeysClick['P'])
     MR3_AnimSetPause(!Ani->IsPause);
+
   glEnable(GL_DEPTH_TEST);
  
   for (i = 0; i < 1; i++)
@@ -88,7 +92,7 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
         MatrMulMatr(MatrMulMatr(MatrMulMatr(
          MatrTranslate(Ani->JX * 59, Ani->JY * 88, 0),
           MatrScale(0.1, 0.1, 0.1)),
-          MatrRotateY(0.5 * Ani->Time + Ani->JR * 180)),
+          MatrRotateY(0/*0.4 * Ani->Time*/)),
           MatrTranslate(j * 1.30, 0, i * 1.30 + 100 * Ani->JZ));
       MR3_GeomDraw(&Uni->Model);
     }
@@ -98,7 +102,7 @@ static VOID MR3_AnimUnitRender( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, Uni->TextId);
-  MR3_PrimDraw(&Uni->Pr);
+  MR3_PrimDraw(&Uni->Pr, 0);
 } /* End of 'MR3_AnimUnitRender' function */
 
 /* creating of model.

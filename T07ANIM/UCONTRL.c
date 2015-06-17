@@ -63,8 +63,6 @@ static VOID MR3_AnimUnitResponse( MR3UNIT_CTRL *Uni, mr3ANIM *Ani )
     MR3_AnimDoExit();
   if (Ani->KeysClick['F'])
     MR3_AnimFlipFullScreen();
-  if (Ani->KeysClick['P'])
-    MR3_AnimSetPause( !Ani->IsPause);
 } /* End of 'MR3_AnimUnitResponse' function */
 
 /* Функция построения объекта анимации.

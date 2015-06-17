@@ -97,7 +97,7 @@ VOID MR3_PrimFree( mr3PRIM *Prim )
  *       mr3PRIM *Prim;
  * ВОЗВРАЩАЕМОЕ ЗНАЧЕНИЕ: Нет.
  */
-VOID MR3_PrimDraw( mr3PRIM *Prim )
+VOID MR3_PrimDraw( mr3PRIM *Prim, INT i )
 {
   INT loc;
   MATR M;
@@ -142,6 +142,10 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   loc = glGetUniformLocation(MR3_RndProg, "Time");
   if (loc != -1)
     glUniform1f(loc, MR3_Anim.Time);
+
+  loc = glGetUniformLocation(MR3_RndProg, "Rand");
+  if (loc != -1)
+    glUniform1f(loc,(float)(rand() % RAND_MAX));
 
   /* Применение материала */
   loc = glGetUniformLocation(MR3_RndProg, "Ka");
@@ -192,6 +196,51 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
  */
 BOOL MR3_PrimCreatePlane( mr3PRIM *Prim, VEC Du, VEC Dv, INT N, INT M )
 {
+  INT i, j;
+  VEC norm, Loc;
+  INT *Ind, *iptr;
+  mr3VERTEX *V, *ptr;
+
+  Loc = VecSet(0, 0, 0);
+  memset(Prim, 0, sizeof(mr3PRIM));
+
+  if ((V = malloc(sizeof(mr3VERTEX) * N * M +
+                  sizeof(INT) * ((2 * M + 1) * (N - 1)))) == NULL)
+    return FALSE;
+  Ind = (INT *)(V + N * M);
+
+  /* заполняем вершины */
+  norm = VecNormalize(VecCrossVec(Du, Dv));
+  for (ptr = V, i = 0; i < N; i++)
+    for (j = 0; j < M; j++, ptr++)
+    {
+      ptr->P = VecAddVec(Loc,
+                 VecAddVec(VecMulNum(Du, j / (M - 1.0)),
+                           VecMulNum(Dv, i / (N - 1.0))));
+      ptr->C = MR3_RndPrimDefaultColor;
+      ptr->N = norm;
+      ptr->T = UVSet(j / (M - 1.0), i / (N - 1.0));
+    }
+
+  /* заполняем индексы */
+  for (iptr = Ind, i = 0; i < N - 1; i++)
+  {
+    for (j = 0; j < M; j++)
+    {
+      /* верхний */
+      *iptr++ = i * M + j + M;
+      /* нижний */
+      *iptr++ = i * M + j;
+    }
+    /* сохраняем индекс разрыва примитива */
+    *iptr++ = 0xFFFFFFFF;
+  }
+
+  MR3_PrimCreate(Prim, MR3_PRIM_GRID, M * N, (2 * M + 1) * (N - 1), V, Ind);
+
+  free(V);
+
+  return TRUE;
 } /* End of 'MR3_PrimCreatePlane' function */
 
 /* Функция создания примитива сфера.
@@ -209,6 +258,8 @@ BOOL MR3_PrimCreatePlane( mr3PRIM *Prim, VEC Du, VEC Dv, INT N, INT M )
  */
 BOOL MR3_PrimCreateSphere( mr3PRIM *Prim, VEC C, FLT R, INT N, INT M )
 {
+ 
+
 } /* End of 'MR3_PrimCreateSphere' function */
 
 /* END OF 'PRIM.C' FILE */

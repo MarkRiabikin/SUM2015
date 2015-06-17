@@ -86,7 +86,8 @@ VOID MR3_GeomDraw( mr3GEOM *G )
       if (loc != -1)
         glUniform1f(loc, i);
       glUseProgram(0);
-      MR3_PrimDraw(&G->Prims[i]);
+      
+      MR3_PrimDraw(&G->Prims[i], i);
     }
 
   /* рисуем прозрачные объекты */
@@ -99,7 +100,7 @@ VOID MR3_GeomDraw( mr3GEOM *G )
       if (loc != -1)
         glUniform1f(loc, i);
       glUseProgram(0);
-      MR3_PrimDraw(&G->Prims[i]);
+      MR3_PrimDraw(&G->Prims[i], 1);
     }
 } /* End of 'MR3_GeomDraw' function */
 
