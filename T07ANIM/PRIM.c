@@ -4,6 +4,7 @@
  * LAST UPDATE: 13.06.2015
  */
 
+
 #include "anim.h"
 #include "render.h"
 #include "image.h"
@@ -101,7 +102,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim, INT i )
 {
   INT loc;
   MATR M;
-
+  srand(30);
   MR3_RndMatrWorldViewProj = MatrMulMatr(MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView), MR3_RndMatrProj);
 
   /* оставлено для отлдадки, если нет шейдеров */
@@ -145,7 +146,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim, INT i )
 
   loc = glGetUniformLocation(MR3_RndProg, "Rand");
   if (loc != -1)
-    glUniform1f(loc,(float)(rand() % RAND_MAX));
+    glUniform1f(loc, 2 * (float)rand() / RAND_MAX - 1);
 
   /* Применение материала */
   loc = glGetUniformLocation(MR3_RndProg, "Ka");
