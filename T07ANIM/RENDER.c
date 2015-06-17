@@ -19,7 +19,8 @@ MATR
   MR3_RndMatrWorld = MR3_UNIT_MATR,
   MR3_RndMatrView = MR3_UNIT_MATR,
   MR3_RndMatrWorldView = MR3_UNIT_MATR,
-  MR3_RndMatrWorldViewProj = MR3_UNIT_MATR;
+  MR3_RndMatrWorldViewProj = MR3_UNIT_MATR,
+  MR3_RndMatrProj = MR3_UNIT_MATR;
 
 /* Параметры проецирования */
 DBL

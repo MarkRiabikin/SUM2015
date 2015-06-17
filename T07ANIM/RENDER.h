@@ -19,7 +19,8 @@ extern MATR
   MR3_RndMatrWorld,
   MR3_RndMatrView,
   MR3_RndMatrWorldView,
-  MR3_RndMatrWorldViewProj;
+  MR3_RndMatrWorldViewProj,
+  MR3_RndMatrProj;
 
 /* ћатрица изменени€ примитива при создании */
 extern MATR MR3_RndPrimMatrConvert;

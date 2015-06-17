@@ -102,7 +102,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   INT loc;
   MATR M;
 
-  MR3_RndMatrWorldViewProj = MatrMulMatr(MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView), MR3_RndMatrWorldView);
+  MR3_RndMatrWorldViewProj = MatrMulMatr(MatrMulMatr(MR3_RndMatrWorld, MR3_RndMatrView), MR3_RndMatrProj);
 
   /* оставлено для отлдадки, если нет шейдеров */
   glLoadMatrixf(MR3_RndMatrWorldViewProj.A[0]);
@@ -119,7 +119,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrView.A[0]);
   loc = glGetUniformLocation(MR3_RndProg, "MatrProj");
   if (loc != -1)
-    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorldView.A[0]);
+    glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrProj.A[0]);
   loc = glGetUniformLocation(MR3_RndProg, "MatrWVP");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, MR3_RndMatrWorldViewProj.A[0]);
@@ -128,7 +128,7 @@ VOID MR3_PrimDraw( mr3PRIM *Prim )
   loc = glGetUniformLocation(MR3_RndProg, "MatrWVInverse");
   if (loc != -1)
     glUniformMatrix4fv(loc, 1, FALSE, M.A[0]);
-
+                                                      
   M = MatrTranspose(MatrInverse(MR3_RndMatrWorld));
   loc = glGetUniformLocation(MR3_RndProg, "MatrWInverse");
   if (loc != -1)

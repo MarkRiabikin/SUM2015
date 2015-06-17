@@ -2,7 +2,7 @@
 
 
 // версия языка шейдера
-#version 400
+#version 330
 
 // кто куда приходит
 layout(location = 0) in vec3 InPosition;
@@ -28,7 +28,7 @@ out vec2 DrawTexCoord;
 
 void main( void )
 {
-  gl_Position = MatrWVP * vec4(InPosition, 1);
+  gl_Position = /*MatrWVP * */MatrWorld * vec4(InPosition, 1);
   DrawNormal = mat3(MatrWInverse) * InNormal;
   DrawPosition = vec3(MatrWorld * vec4(InPosition, 1));
   DrawColor = InColor;

@@ -40,11 +40,6 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
   MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrRotateX(0));
   MR3_GeomLoad(&Uni->Model, /*"avent.G3D"*/ "Q:\\Models\\Avent\\avent.G3D" );
 
-  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(5, 5, 5), MatrRotateX(-90));
-  //MR3_GeomLoad(&Uni->Model, "Q:\\Models\\Nissan_Pathfinder\\NISPF.G3D");
-
-  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(3, 3, 3), MatrRotateX(-90));
-  //MR3_GeomLoad(&Uni->Geom, "Models\\X6\\X6.G3D");
 } /* End of 'MR3_AnimUnitInit' function */
 
 /* Функция деинициализации объекта анимации.

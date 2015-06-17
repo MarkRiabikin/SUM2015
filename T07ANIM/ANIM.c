@@ -10,7 +10,6 @@
 
 /* Системный контекст анимации */
 mr3ANIM MR3_Anim;
-MATR RndMatrFrustum;
 
 /* Сохраненные мышиные координаты */
 static INT
@@ -145,7 +144,7 @@ VOID MR3_AnimResize( INT W, INT H )
   else
     MR3_RndHp = (DBL)H / W * 3, MR3_RndWp = 3;
 
-  RndMatrFrustum = MatrFrustum(-MR3_RndWp / 2, MR3_RndWp / 2, -MR3_RndHp / 2, MR3_RndHp / 2, MR3_RndProjDist, 800);  
+  MR3_RndMatrProj = MatrFrustum(-MR3_RndWp / 2, MR3_RndWp / 2, -MR3_RndHp / 2, MR3_RndHp / 2, MR3_RndProjDist, 800);  
 } /* End of 'MR3_AnimResize' function */
 
 /* Функция построения кадра анимации.
