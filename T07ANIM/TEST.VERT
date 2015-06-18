@@ -21,6 +21,7 @@ uniform mat4 MatrWInverse;
 uniform float Time;
 uniform float PartNo;
 uniform float Rand;
+uniform int Id;
 
 // выходные параметры
 out vec4 DrawColor;
@@ -28,38 +29,71 @@ out vec3 DrawNormal;
 out vec3 DrawPosition;
 out vec2 DrawTexCoord;
 
+float sqr(float Sq)
+{
+  return Sq *= Sq;
+}
+
 void main( void )
 {
+  int flag;
+  int sc = 0;
   float X;
   float dx;
   float dy; 
   float dz;
-
-  X = radians(Time * 60.0);
-  float co = cos(X);
-  float si = sin(X);
-
+  float fy;
+  float fx;
+  float fz;
+  float dt;
+  float StartT;
+  float Vel = 10;
+  float angle = radians(30.0);
+  float g0 = 9.816;
+  
+     
+    X = radians(Time * 30.0);
+    float co = cos(X);
+    float si = sin(X);
+   
+   
   mat4 RotY = mat4(vec4(co, 0, -si, 0),
-  	           vec4(0 , 1,  0 , 0),
-    	           vec4(si, 0,  co, 0),
-    		   vec4(0 , 0,  0 , 1));
+   	           vec4(0 , 1,  0 , 0),
+     	           vec4(si, 0,  co, 0),
+     		   vec4(0 , 0,  0 , 1));
 
- if(PartNo != 10 && PartNo != 11 && PartNo != 26)
+    mat4 Fly = mat4(vec4(1 ,  0, 0 , 0),
+  		     vec4(0 ,  1, 0 , 0),
+    		     vec4(0 ,  0, 1 , 0),
+    	             vec4(0, 50, 0, 1)); 
+
+       
+  if(sin(Time/4) > 0)
   {
-    dx = (Rand) * 100 * abs(sin(Time/2)) * mod(PartNo, 8);
-    dy = (Rand) * 100 * abs(sin(Time/2)) * mod(PartNo, 9);
-    dz = (Rand) * 100 * abs(sin(Time/2)) * mod(PartNo, 7);
+    dx = (Rand) * 100 * abs(sin(Time/4)) * mod(PartNo, 8);
+    dy = (Rand) * 100 * abs(sin(Time/4)) * mod(PartNo, 9);
+    dz = (Rand) * 100 * abs(sin(Time/4)) * mod(PartNo, 7);
+  }
+  else
+  {
+    dx = (Rand) * 100 * abs(sin(0)) * mod(PartNo, 8);
+    dy = (Rand) * 100 * abs(sin(0)) * mod(PartNo, 9);
+    dz = (Rand) * 100 * abs(sin(0)) * mod(PartNo, 7);
+  }
+
+  if(PartNo != 10)
+  {
     mat4 M = mat4(vec4(1 ,  0, 0 , 0),
   		  vec4(0 ,  1, 0 , 0),
     		  vec4(0 ,  0, 1 , 0),
     	          vec4(dx, dy, dz, 1)); 
     
-    gl_Position = MatrWVP * MatrWorld * M * RotY * vec4(InPosition * 12, 1);
+    gl_Position = MatrWVP * MatrWorld * RotY * Fly * M * vec4(InPosition * 10, 1);
   }
   else
-    gl_Position = MatrWVP * MatrWorld * RotY * vec4(InPosition * 12, 1);
-  DrawNormal = mat3(MatrWInverse) * InNormal;
-  DrawPosition = vec3(MatrWorld * vec4(InPosition, 1));
-  DrawColor = InColor * 3.3;
-  DrawTexCoord = InTexCoord;
-}
+    gl_Position = MatrWVP * MatrWorld  * RotY * Fly * vec4(InPosition * 10, 1);
+    DrawNormal = mat3(MatrWInverse) * InNormal;
+    DrawPosition = vec3(MatrWorld * RotY * Fly * vec4(InPosition, 1));
+    DrawColor = InColor * 3.3;
+    DrawTexCoord = InTexCoord;
+}   

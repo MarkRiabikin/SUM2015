@@ -14,6 +14,7 @@ uniform mat4 MatrWVP;
 uniform mat4 MatrWV;
 uniform mat4 MatrWVInverse;
 uniform mat4 MatrWInverse;
+uniform int Id;
 
 // 
 out vec4 OutColor;
@@ -43,7 +44,7 @@ vec4 Shade( vec3 P, vec3 N )
   float a = 1;
   vec3 color = vec3(0, 0, 0);
   vec3 L = normalize(vec3(1, 1, 1));
-  vec3 V;// = mat3(MatrWVInverse) * vec3(-MatrView[3][0], -MatrView[3][1], -MatrView[3][2]);
+  vec3 V;
 
   V = -normalize(P - vec3(MatrWVInverse * vec4(0, 0, 0, 1)));
 
@@ -64,7 +65,7 @@ vec4 Shade( vec3 P, vec3 N )
       color += Kd * nl;
   }
 
-  // 
+   
   vec3 R = reflect(V, N);
   float rl = dot(R, L); 
   if (rl > 0)
@@ -75,9 +76,19 @@ vec4 Shade( vec3 P, vec3 N )
 
 void main( void )
 {
-  //if(PartNo != 26)  discard;
   
+  vec4 pos =  MatrView * vec4(DrawPosition, 1);
+  vec4 fog = vec4(0.6, 0.6, 0.6, 1.0);
+  float d = -pos.z, start = 26, end = 35, f;
+  if (d < start)
+    f = 1;
+  else if(d > end)
+    f = 0;
+  else
+    f = (d - end) / (start - end);
   OutColor = DrawColor * Shade(DrawPosition.xyz, DrawNormal);
-  //OutColor = vec4(0, 0, 0, 1);
+  OutColor = OutColor * f + fog * (1 - f);
+  
 }
 
+                   

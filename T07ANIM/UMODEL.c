@@ -38,11 +38,11 @@ static VOID MR3_AnimUnitInit( mr3UNIT_MODEL *Uni, mr3ANIM *Ani )
   MR3_PrimCreate(&Uni->Pr, MR3_PRIM_TRIMESH, 4, 6, V, I);
 
   MR3_TextureLoad("destroy.bmp");
-  //MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(1, 1, 1), MatrTranslate(-500, 0, 500));
-  //R3_PrimCreatePlane(&Uni->Pr, VecSet(1000, 0, 0), VecSet(0, 0, 1000), 30, 30);
+
   MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(15, 15, 15), MatrTranslate(0, 0, 0));
   MR3_GeomLoad(&Uni->Model, "E:\\Models\\Avent\\avent.G3D" );
-
+  /*MR3_RndPrimMatrConvert = MatrMulMatr(MatrScale(50, 50, 50), MatrRotateY(60));
+  MR3_GeomLoad(&Uni->Model, "E:\\Models\\NISPF\\avent.G3D" );  */
 } /* End of 'MR3_AnimUnitInit' function */
 
 /* Функция деинициализации объекта анимации.

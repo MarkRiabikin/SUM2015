@@ -148,6 +148,10 @@ VOID MR3_PrimDraw( mr3PRIM *Prim, INT i )
   if (loc != -1)
     glUniform1f(loc, 2 * (float)rand() / RAND_MAX - 1);
 
+  loc = glGetUniformLocation(MR3_RndProg, "Id");
+  if (loc != -1)
+    glUniform1f(loc, Prim->Id);
+
   /* Применение материала */
   loc = glGetUniformLocation(MR3_RndProg, "Ka");
   if (loc != -1)
@@ -201,6 +205,7 @@ BOOL MR3_PrimCreatePlane( mr3PRIM *Prim, VEC Du, VEC Dv, INT N, INT M )
   VEC norm, Loc;
   INT *Ind, *iptr;
   mr3VERTEX *V, *ptr;
+  Prim->Id = -1;
 
   Loc = VecSet(0, 0, 0);
   memset(Prim, 0, sizeof(mr3PRIM));
